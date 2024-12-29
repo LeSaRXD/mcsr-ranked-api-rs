@@ -2,6 +2,8 @@ use role_type::SupporterTier;
 use serde::Deserialize;
 use uuid::Uuid;
 
+use crate::{Elo, Rank};
+
 pub mod identifier;
 pub mod role_type;
 #[cfg(test)]
@@ -14,8 +16,8 @@ pub struct UserProfile {
 	uuid: Uuid,
 	nickname: Box<str>,
 	role_type: SupporterTier,
-	elo_rate: Option<u16>,
-	elo_rank: Option<u32>,
+	elo_rate: Option<Elo>,
+	elo_rank: Option<Rank>,
 }
 
 impl UserProfile {
@@ -32,11 +34,11 @@ impl UserProfile {
 		self.role_type
 	}
 	/// The user's ELO
-	pub fn elo(&self) -> Option<u16> {
+	pub fn elo(&self) -> Option<Elo> {
 		self.elo_rate
 	}
 	/// The user's leaderboard rank, 1-indexed
-	pub fn rank(&self) -> Option<u32> {
+	pub fn rank(&self) -> Option<Rank> {
 		self.elo_rank
 	}
 }
