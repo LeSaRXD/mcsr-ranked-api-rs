@@ -21,6 +21,22 @@ pub struct UserProfile {
 }
 
 impl UserProfile {
+	#[cfg(test)]
+	pub(crate) fn new(
+		uuid: Uuid,
+		name: &str,
+		role_type: SupporterTier,
+		elo_rate: Option<Elo>,
+		elo_rank: Option<Rank>,
+	) -> Self {
+		Self {
+			uuid,
+			nickname: name.into(),
+			role_type,
+			elo_rate,
+			elo_rank,
+		}
+	}
 	/// The user's minecraft UUID
 	pub fn uuid(&self) -> Uuid {
 		self.uuid
