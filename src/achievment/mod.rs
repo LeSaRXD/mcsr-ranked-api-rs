@@ -1,9 +1,10 @@
 use core::fmt;
 
-use chrono::{DateTime, TimeZone, Utc};
+use chrono::{DateTime, Utc};
 use serde::de::{self, MapAccess, Visitor};
 use serde::{Deserialize, Deserializer};
 
+use crate::helpers::NextUnixTimestamp;
 use crate::{Rank, Season};
 
 #[cfg(test)]
@@ -112,16 +113,7 @@ impl<'de> Deserialize<'de> for Achievement {
 							if date.is_some() {
 								return Err(de::Error::duplicate_field("date"));
 							}
-							let unix: i64 = map.next_value()?;
-							match Utc.timestamp_opt(unix, 0).single() {
-								Some(timestamp) => date = Some(timestamp),
-								None => {
-									return Err(de::Error::invalid_value(
-										de::Unexpected::Signed(unix),
-										&"a unix timestamp",
-									))
-								}
-							};
+							date = Some(map.next_unix_timestamp()?);
 						}
 						Data => {
 							if data.is_some() {
