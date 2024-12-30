@@ -7,6 +7,12 @@ edition = "2021"
 name = "mcsr_ranked_api"
 path = "src/lib.rs"
 
+[features]
+default = ["all"]
+achievements = []
+matches = []
+all = ["achievements", "matches"]
+
 [dependencies]
 chrono = { version = "0.4.39", features = ["serde"] }
 serde = { version = "1.0.217", features = ["derive"] }

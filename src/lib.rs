@@ -1,6 +1,8 @@
 use serde::Deserialize;
 
+#[cfg(feature = "achievements")]
 pub mod achievment;
+#[cfg(feature = "matches")]
 pub mod game;
 pub(crate) mod helpers;
 pub mod user;
