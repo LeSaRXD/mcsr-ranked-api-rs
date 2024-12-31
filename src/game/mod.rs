@@ -4,9 +4,9 @@ use serde::Deserialize;
 use serde_repr::Deserialize_repr;
 use uuid::Uuid;
 
+use crate::types::Time;
+use crate::types::{Elo, EloChange, MatchId, Rank, Season};
 use crate::user::UserProfile;
-use crate::Time;
-use crate::{Elo, EloChange, MatchId, Rank, Season};
 
 #[cfg(test)]
 mod tests;

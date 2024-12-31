@@ -2,7 +2,7 @@ use role_type::SupporterTier;
 use serde::Deserialize;
 use uuid::Uuid;
 
-use crate::{Elo, Rank};
+use crate::types::{Elo, Rank};
 
 pub mod identifier;
 pub mod role_type;

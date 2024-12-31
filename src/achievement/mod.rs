@@ -5,7 +5,7 @@ use serde::de::{self, MapAccess, Visitor};
 use serde::{Deserialize, Deserializer};
 
 use crate::helpers::NextUnixTimestamp;
-use crate::{Rank, Season};
+use crate::types::{Rank, Season};
 
 #[cfg(test)]
 mod tests;

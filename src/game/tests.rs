@@ -8,8 +8,8 @@ use crate::{
 		BastionType, MatchCategory, MatchCompletion, MatchEloUpdate, MatchInfo, MatchRank,
 		MatchResult, MatchTimelineEvent, MatchType, SeedType,
 	},
+	types::Time,
 	user::{role_type::SupporterTier, UserProfile},
-	Time,
 };
 
 #[test]
