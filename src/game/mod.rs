@@ -53,12 +53,13 @@ pub enum MatchType {
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MatchResult {
-	uuid: Uuid,
+	#[serde(rename = "uuid")]
+	winner_uuid: Uuid,
 	time: Time,
 }
 impl MatchResult {
 	pub fn winner_uuid(&self) -> Uuid {
-		self.uuid
+		self.winner_uuid
 	}
 	pub fn time(&self) -> Time {
 		self.time
@@ -87,14 +88,16 @@ impl MatchRank {
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MatchEloUpdate {
-	uuid: Uuid,
+	#[serde(rename = "uuid")]
+	player_uuid: Uuid,
 	change: Option<EloChange>,
-	elo_rate: Option<Elo>,
+	#[serde(rename = "eloRate")]
+	elo: Option<Elo>,
 }
 impl MatchEloUpdate {
 	/// Player (whose ELO changed) miencraft UUID
 	pub fn player_uuid(&self) -> Uuid {
-		self.uuid
+		self.player_uuid
 	}
 	/// Elo change (delta)
 	pub fn elo_change(&self) -> Option<EloChange> {
@@ -102,7 +105,7 @@ impl MatchEloUpdate {
 	}
 	/// Current elo
 	pub fn elo(&self) -> Option<Elo> {
-		self.elo_rate
+		self.elo
 	}
 }
 
@@ -131,13 +134,14 @@ pub enum BastionType {
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MatchCompletion {
-	uuid: Uuid,
+	#[serde(rename = "uuid")]
+	player_uuid: Uuid,
 	time: Time,
 }
 impl MatchCompletion {
 	/// UUID of the player who completed the match
 	pub fn player_uuid(&self) -> Uuid {
-		self.uuid
+		self.player_uuid
 	}
 	/// Completion time
 	pub fn time(&self) -> Time {
@@ -149,20 +153,21 @@ impl MatchCompletion {
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MatchTimelineEvent {
-	uuid: Uuid,
+	#[serde(rename = "uuid")]
+	player_uuid: Uuid,
 	time: Time,
 	#[serde(rename = "type")]
-	kind: Box<str>,
+	id: Box<str>,
 }
 impl MatchTimelineEvent {
 	pub fn player_uuid(&self) -> Uuid {
-		self.uuid
+		self.player_uuid
 	}
 	pub fn time(&self) -> Time {
 		self.time
 	}
-	pub fn kind(&self) -> &str {
-		&self.kind
+	pub fn id(&self) -> &str {
+		&self.id
 	}
 }
 

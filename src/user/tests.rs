@@ -2,7 +2,7 @@ use std::str::FromStr;
 
 use uuid::Uuid;
 
-use crate::user::{identifier::UserIdentifier, role_type::SupporterTier, UserProfile};
+use crate::user::{identifier::UserIdentifier, SupporterTier, UserProfile};
 
 #[test]
 fn user_profile() {
@@ -17,9 +17,9 @@ fn user_profile() {
 		UserProfile {
 			uuid: Uuid::from_str("3c8757790ab0400b8b9e3936e0dd535b").unwrap(),
 			nickname: "doogile".into(),
-			role_type: SupporterTier::Diamond,
-			elo_rate: None,
-			elo_rank: None,
+			supporter_tier: SupporterTier::Diamond,
+			elo: None,
+			rank: None,
 		}
 	);
 	assert_eq!(
@@ -27,9 +27,9 @@ fn user_profile() {
 		UserProfile {
 			uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
 			nickname: "LaysarOwO".into(),
-			role_type: SupporterTier::None,
-			elo_rate: Some(1226),
-			elo_rank: Some(333),
+			supporter_tier: SupporterTier::None,
+			elo: Some(1226),
+			rank: Some(333),
 		}
 	);
 }

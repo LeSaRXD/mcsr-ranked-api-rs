@@ -6,3 +6,6 @@ pub(crate) mod helpers;
 pub mod pagination;
 pub mod types;
 pub mod user;
+
+pub use types::ReqError as Error;
+pub use types::ReqResult as Result;

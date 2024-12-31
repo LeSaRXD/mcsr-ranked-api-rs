@@ -1,13 +1,21 @@
-use role_type::SupporterTier;
 use serde::Deserialize;
 use uuid::Uuid;
 
 use crate::types::{Elo, Rank};
 
 pub mod identifier;
-pub mod role_type;
 #[cfg(test)]
 mod tests;
+use serde_repr::Deserialize_repr;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Deserialize_repr)]
+#[repr(u8)]
+pub enum SupporterTier {
+	None = 0,
+	Stone = 1,
+	Iron = 2,
+	Diamond = 3,
+}
 
 /// A user's profile
 #[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
@@ -15,9 +23,12 @@ mod tests;
 pub struct UserProfile {
 	uuid: Uuid,
 	nickname: Box<str>,
-	role_type: SupporterTier,
-	elo_rate: Option<Elo>,
-	elo_rank: Option<Rank>,
+	#[serde(rename = "roleType")]
+	supporter_tier: SupporterTier,
+	#[serde(rename = "eloRate")]
+	elo: Option<Elo>,
+	#[serde(rename = "eloRank")]
+	rank: Option<Rank>,
 }
 
 impl UserProfile {
@@ -32,9 +43,9 @@ impl UserProfile {
 		Self {
 			uuid,
 			nickname: name.into(),
-			role_type,
-			elo_rate,
-			elo_rank,
+			supporter_tier: role_type,
+			elo: elo_rate,
+			rank: elo_rank,
 		}
 	}
 	/// The user's minecraft UUID
@@ -47,14 +58,14 @@ impl UserProfile {
 	}
 	/// The user's supporter tier
 	pub fn supporter_tier(&self) -> SupporterTier {
-		self.role_type
+		self.supporter_tier
 	}
 	/// The user's ELO
 	pub fn elo(&self) -> Option<Elo> {
-		self.elo_rate
+		self.elo
 	}
 	/// The user's leaderboard rank, 1-indexed
 	pub fn rank(&self) -> Option<Rank> {
-		self.elo_rank
+		self.rank
 	}
 }

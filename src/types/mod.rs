@@ -36,15 +36,46 @@ impl Time {
 	}
 }
 
-pub type ApiResult<T> = Result<T, Option<Box<str>>>;
+#[doc(hidden)]
+/// Result with this crate's own `Error` type
+pub type ReqResult<T> = Result<T, ReqError>;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) enum DeApiResult<T> {
-	Ok(T),
-	Err(Option<Box<str>>),
+#[doc(hidden)]
+/// Error returned by a request to the API
+#[derive(Debug)]
+pub enum ReqError {
+	/// Ranked API error
+	Api(Option<Box<str>>),
+	/// Reqwest library error
+	Reqwest(reqwest::Error),
 }
 
-impl<'de, T> Deserialize<'de> for DeApiResult<T>
+impl PartialEq for ReqError {
+	fn eq(&self, other: &Self) -> bool {
+		use ReqError::*;
+
+		match (self, other) {
+			(Api(lhs), Api(rhs)) => lhs == rhs,
+			(Reqwest(lhs), Reqwest(rhs)) => lhs.to_string() == rhs.to_string(),
+			_ => false,
+		}
+	}
+}
+impl Eq for ReqError {}
+
+impl From<reqwest::Error> for ReqError {
+	fn from(value: reqwest::Error) -> Self {
+		Self::Reqwest(value)
+	}
+}
+
+#[derive(Debug, PartialEq, Eq)]
+pub(crate) enum DeReqResult<T> {
+	Ok(T),
+	Err(ReqError),
+}
+
+impl<'de, T> Deserialize<'de> for DeReqResult<T>
 where
 	T: Deserialize<'de>,
 {
@@ -95,7 +126,7 @@ where
 		where
 			T: Deserialize<'de>,
 		{
-			type Value = DeApiResult<T>;
+			type Value = DeReqResult<T>;
 
 			fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
 				formatter.write_str("struct ApiResult")
@@ -115,7 +146,7 @@ where
 				}
 
 				let mut status: Option<ApiStatus> = None;
-				let mut result: Option<DeApiResult<T>> = None;
+				let mut result: Option<DeReqResult<T>> = None;
 
 				while let Some(key) = map.next_key()? {
 					match key {
@@ -133,11 +164,11 @@ where
 								None => return Err(de::Error::missing_field("status")),
 								Some(ApiStatus::Error) => {
 									let error_message: Option<Box<str>> = map.next_value()?;
-									result = Some(DeApiResult::Err(error_message));
+									result = Some(DeReqResult::Err(ReqError::Api(error_message)));
 								}
 								Some(ApiStatus::Success) => {
 									let data: T = map.next_value()?;
-									result = Some(DeApiResult::Ok(data));
+									result = Some(DeReqResult::Ok(data));
 								}
 							}
 						}
@@ -157,11 +188,11 @@ where
 	}
 }
 
-impl<T> From<DeApiResult<T>> for ApiResult<T> {
-	fn from(value: DeApiResult<T>) -> Self {
+impl<T> From<DeReqResult<T>> for ReqResult<T> {
+	fn from(value: DeReqResult<T>) -> Self {
 		match value {
-			DeApiResult::Ok(t) => Ok(t),
-			DeApiResult::Err(e) => Err(e),
+			DeReqResult::Ok(t) => Ok(t),
+			DeReqResult::Err(e) => Err(e),
 		}
 	}
 }
