@@ -49,8 +49,8 @@ fn match_info() {
 			time: Time(620128),
 		}
 	);
-	assert_eq!(info.forfeited, false);
-	assert_eq!(info.decayed, false);
+	assert!(!info.forfeited);
+	assert!(!info.decayed);
 	assert_eq!(
 		info.rank,
 		MatchRank {
@@ -297,7 +297,7 @@ fn match_info() {
 			}
 		]
 	);
-	assert_eq!(info.replay_exist, true);
+	assert!(info.replay_exist);
 }
 
 #[test]

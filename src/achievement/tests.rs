@@ -1,7 +1,7 @@
 use chrono::{TimeZone, Utc};
 use serde::de::{Error, Unexpected};
 
-use crate::achievment::{Achievement, AchievementData};
+use super::{Achievement, AchievementData};
 
 fn achievment_from(json: &str) -> Achievement {
 	serde_json::from_str(json).unwrap()
