@@ -1,8 +1,11 @@
 use chrono::{naive::serde::ts_seconds, DateTime, Utc};
 use serde::{
 	de::{Error, MapAccess},
-	Deserialize, Deserializer,
+	Deserialize, Deserializer, Serialize,
 };
+
+#[cfg(test)]
+mod tests;
 
 struct DeserializeUnixTimestamp(pub(crate) DateTime<Utc>);
 impl<'de> Deserialize<'de> for DeserializeUnixTimestamp {
@@ -35,10 +38,30 @@ where
 	<T as std::str::FromStr>::Err: std::fmt::Display,
 {
 	let value = String::deserialize(de)?;
-	value.parse().map_err(|_| {
-		serde::de::Error::invalid_type(
-			serde::de::Unexpected::Str(&value),
-			&"a minecraft seed (u64)",
-		)
-	})
+	value
+		.parse()
+		.map_err(|_| serde::de::Error::invalid_type(serde::de::Unexpected::Str(&value), &"a u64"))
+}
+
+pub(crate) fn construct_url<'v, V, S>(
+	base: impl ToString,
+	variables: V,
+	params: &Option<impl Serialize>,
+) -> Box<str>
+where
+	V: IntoIterator<Item = &'v S>,
+	S: AsRef<str> + 'v,
+{
+	let mut url = base.to_string();
+	for elem in variables {
+		url = url.replacen("{}", elem.as_ref(), 1);
+	}
+
+	if let Some(params) = params {
+		let params_str = serde_qs::to_string(params).expect("Expected valid params");
+		url.reserve_exact(params_str.len() + 1);
+		url.push('?');
+		url.push_str(&params_str);
+	}
+	url.into_boxed_str()
 }
