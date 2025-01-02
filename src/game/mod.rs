@@ -54,11 +54,11 @@ pub enum MatchType {
 #[serde(rename_all = "camelCase")]
 pub struct MatchResult {
 	#[serde(rename = "uuid")]
-	winner_uuid: Uuid,
+	winner_uuid: Option<Uuid>,
 	time: Time,
 }
 impl MatchResult {
-	pub fn winner_uuid(&self) -> Uuid {
+	pub fn winner_uuid(&self) -> Option<Uuid> {
 		self.winner_uuid
 	}
 	pub fn time(&self) -> Time {
@@ -191,64 +191,86 @@ pub struct MatchInfo {
 	changes: Box<[MatchEloUpdate]>,
 	seed_type: SeedType,
 	bastion_type: BastionType,
-	completions: Box<[MatchCompletion]>,
-	#[serde(default)]
-	timelines: Option<Box<[MatchTimelineEvent]>>,
-	replay_exist: bool,
 }
-
 impl MatchInfo {
+	/// Id of the match
 	pub fn id(&self) -> MatchId {
 		self.id
 	}
+	/// Type of the match
 	pub fn kind(&self) -> MatchType {
 		self.kind
 	}
+	/// Season during which the match took place
 	pub fn season(&self) -> Season {
 		self.season
 	}
+	/// SpeedrunIGT category of the match
 	pub fn category(&self) -> MatchCategory {
 		self.category
 	}
+	/// Date and time when the match took place
 	pub fn date(&self) -> DateTime<Utc> {
 		self.date
 	}
+	/// Users participating in the match
 	pub fn players(&self) -> &[UserProfile] {
 		&self.players
 	}
+	/// Users spectating the match
 	pub fn spectators(&self) -> &[UserProfile] {
 		&self.spectators
 	}
+	/// The outcome of the match
 	pub fn result(&self) -> &MatchResult {
 		&self.result
 	}
+	/// Whether the match ended by forfeit or not
 	pub fn forfeited(&self) -> bool {
 		self.forfeited
 	}
+	/// Whether the match was a decay match or not
 	pub fn decayed(&self) -> bool {
 		self.decayed
 	}
+	/// The leaderboard ranking of the match
 	pub fn rank(&self) -> &MatchRank {
 		&self.rank
 	}
+	/// The updates to the participants' ELOs
 	pub fn elo_updates(&self) -> &[MatchEloUpdate] {
 		&self.changes
 	}
+	/// The overworld seed type
 	pub fn seed_type(&self) -> SeedType {
 		self.seed_type
 	}
+	/// The bastion type
 	pub fn bastion_type(&self) -> BastionType {
 		self.bastion_type
 	}
+}
+
+/// Advanced (full) match info
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AdvancedMatchInfo {
+	#[serde(flatten)]
+	info: MatchInfo,
+	completions: Box<[MatchCompletion]>,
+	timelines: Box<[MatchTimelineEvent]>,
+	replay_exist: bool,
+}
+impl AdvancedMatchInfo {
+	/// The completions info of the match
 	pub fn completions(&self) -> &[MatchCompletion] {
 		&self.completions
 	}
-	pub fn timeline_events(&self) -> Option<&[MatchTimelineEvent]> {
-		match &self.timelines {
-			Some(events) => Some(events),
-			None => None,
-		}
+	/// The events (achievements) timeline
+	pub fn timeline_events(&self) -> &[MatchTimelineEvent] {
+		&self.timelines
 	}
+	/// Whether the replay for the match exists
 	pub fn replay_exists(&self) -> bool {
 		self.replay_exist
 	}
