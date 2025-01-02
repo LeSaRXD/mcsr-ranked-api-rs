@@ -1,8 +1,8 @@
 use serde::Serialize;
 
 use crate::{
-	helpers::construct_url,
-	types::{DeReqResult, Season},
+	helpers::{make_request, make_request_blocking},
+	types::Season,
 };
 
 use super::{identifier::UserIdentifier, info::UserInfo};
@@ -28,23 +28,15 @@ impl GetUserParams {
 
 impl UserIdentifier<'_> {
 	/// GET the user by identifier using given `params`
-	pub async fn get_user(&self, params: &Option<GetUserParams>) -> crate::Result<UserInfo> {
-		let url = construct_url(BASE_URL, [&self.to_string()], params);
-		reqwest::get(url.as_ref())
-			.await?
-			.json::<DeReqResult<UserInfo>>()
-			.await?
-			.into()
+	pub async fn get_user(&self, params: GetUserParams) -> crate::Result<UserInfo> {
+		make_request(BASE_URL, [&self.to_string()], &Some(params)).await
 	}
 }
 
 #[cfg(feature = "blocking")]
 impl UserIdentifier<'_> {
 	/// Synchronously GET the user by identifier using given `params`
-	pub fn get_user_blocking(&self, params: &Option<GetUserParams>) -> crate::Result<UserInfo> {
-		let url = construct_url(BASE_URL, [&self.to_string()], params);
-		reqwest::blocking::get(url.as_ref())?
-			.json::<DeReqResult<UserInfo>>()?
-			.into()
+	pub fn get_user_blocking(&self, params: GetUserParams) -> crate::Result<UserInfo> {
+		make_request_blocking(BASE_URL, [&self.to_string()], &Some(params))
 	}
 }

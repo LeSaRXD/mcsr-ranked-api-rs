@@ -1,8 +1,10 @@
 use chrono::{naive::serde::ts_seconds, DateTime, Utc};
 use serde::{
-	de::{Error, MapAccess},
+	de::{DeserializeOwned, Error, MapAccess},
 	Deserialize, Deserializer, Serialize,
 };
+
+use crate::types::DeReqResult;
 
 #[cfg(test)]
 mod tests;
@@ -43,7 +45,7 @@ where
 		.map_err(|_| serde::de::Error::invalid_type(serde::de::Unexpected::Str(&value), &"a u64"))
 }
 
-pub(crate) fn construct_url<'v, V, S>(
+fn construct_url<'v, V, S>(
 	base: impl ToString,
 	variables: V,
 	params: &Option<impl Serialize>,
@@ -64,4 +66,38 @@ where
 		url.push_str(&params_str);
 	}
 	url.into_boxed_str()
+}
+
+pub(crate) async fn make_request<'v, T, V, S>(
+	base_url: &str,
+	variables: V,
+	params: &Option<impl Serialize>,
+) -> crate::Result<T>
+where
+	T: DeserializeOwned,
+	V: IntoIterator<Item = &'v S>,
+	S: AsRef<str> + 'v,
+{
+	let url = construct_url(base_url, variables, params);
+	reqwest::get(url.as_ref())
+		.await?
+		.json::<DeReqResult<T>>()
+		.await?
+		.into()
+}
+
+pub(crate) fn make_request_blocking<'v, T, V, S>(
+	base_url: &str,
+	variables: V,
+	params: &Option<impl Serialize>,
+) -> crate::Result<T>
+where
+	T: DeserializeOwned,
+	V: IntoIterator<Item = &'v S>,
+	S: AsRef<str> + 'v,
+{
+	let url = construct_url(base_url, variables, params);
+	reqwest::blocking::get(url.as_ref())?
+		.json::<DeReqResult<T>>()?
+		.into()
 }
