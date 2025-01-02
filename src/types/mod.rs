@@ -13,6 +13,7 @@ pub type Phase = u8;
 pub type MatchId = u64;
 #[cfg(feature = "matches")]
 pub type WeeklyRaceId = u32;
+pub type MinecraftSeed = u64;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
 pub struct Time(pub u64);

@@ -8,10 +8,11 @@ name = "mcsr_ranked_api"
 path = "src/lib.rs"
 
 [features]
-default = ["all"]
+default = ["achievements", "matches", "weekly_races"]
 achievements = []
 matches = []
-all = ["achievements", "matches"]
+weekly_races = []
+all = ["achievements", "matches", "weekly_races"]
 
 [dependencies]
 chrono = { version = "0.4.39", features = ["serde"] }
