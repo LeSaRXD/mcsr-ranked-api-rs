@@ -1,7 +1,7 @@
 use chrono::DateTime;
 use chrono::{serde::ts_seconds, Utc};
 use serde::Deserialize;
-use serde_repr::Deserialize_repr;
+use serde_repr::{Deserialize_repr, Serialize_repr};
 use uuid::Uuid;
 
 use crate::types::Time;
@@ -42,7 +42,7 @@ pub enum MatchCategory {
 	MineAChunk,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize_repr)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize_repr, Serialize_repr)]
 #[repr(u8)]
 pub enum MatchType {
 	Causal = 1,

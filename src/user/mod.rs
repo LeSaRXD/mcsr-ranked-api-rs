@@ -1,12 +1,14 @@
 use serde::Deserialize;
+use serde_repr::Deserialize_repr;
 use uuid::Uuid;
 
 use crate::types::{Elo, Rank};
 
 pub mod identifier;
+pub mod info;
+pub mod requests;
 #[cfg(test)]
 mod tests;
-use serde_repr::Deserialize_repr;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Deserialize_repr)]
 #[repr(u8)]
