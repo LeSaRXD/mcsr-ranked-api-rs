@@ -1,6 +1,8 @@
 use serde::Deserialize;
 
-use crate::types::{Rank, Time, WeeklyRaceId};
+#[cfg(feature = "weekly_races")]
+use crate::types::WeeklyRaceId;
+use crate::types::{Rank, Time};
 
 /// User's weekly race result
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]

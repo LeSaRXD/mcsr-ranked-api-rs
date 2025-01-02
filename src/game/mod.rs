@@ -114,7 +114,7 @@ impl MatchEloUpdate {
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum SeedType {
 	Village,
-	BurriedTreasure,
+	BuriedTreasure,
 	Shipwreck,
 	RuinedPortal,
 	DesertTemple,

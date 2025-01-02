@@ -1,9 +1,11 @@
 use chrono::{serde::ts_seconds, DateTime, Utc};
 use serde::Deserialize;
 
+#[cfg(feature = "weekly_races")]
+use crate::types::WeeklyRaceId;
 use crate::{
 	helpers::string_u64,
-	types::{MinecraftSeed, Rank, Time, WeeklyRaceId},
+	types::{MinecraftSeed, Rank, Time},
 	user::UserProfile,
 };
 

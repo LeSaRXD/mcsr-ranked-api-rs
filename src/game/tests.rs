@@ -430,8 +430,8 @@ fn seed_type() {
 		SeedType::Village
 	);
 	assert_eq!(
-		serde_json::from_str::<SeedType>(r#""BURRIED_TREASURE""#).unwrap(),
-		SeedType::BurriedTreasure
+		serde_json::from_str::<SeedType>(r#""BURIED_TREASURE""#).unwrap(),
+		SeedType::BuriedTreasure
 	);
 	assert_eq!(
 		serde_json::from_str::<SeedType>(r#""SHIPWRECK""#).unwrap(),

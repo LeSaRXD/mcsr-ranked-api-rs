@@ -11,7 +11,7 @@ pub type Season = u8;
 pub type Phase = u8;
 #[cfg(feature = "matches")]
 pub type MatchId = u64;
-#[cfg(feature = "matches")]
+#[cfg(feature = "weekly_races")]
 pub type WeeklyRaceId = u32;
 pub type MinecraftSeed = u64;
 
