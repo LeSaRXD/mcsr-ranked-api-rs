@@ -8,6 +8,7 @@ use crate::types::Time;
 use crate::types::{Elo, EloChange, MatchId, Rank, Season};
 use crate::user::UserProfile;
 
+pub mod requests;
 #[cfg(test)]
 mod tests;
 pub mod versus;
