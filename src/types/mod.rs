@@ -1,5 +1,9 @@
-use core::fmt;
-use std::{fmt::Debug, marker::PhantomData, str::FromStr};
+use std::{
+	error::Error,
+	fmt::{self, Display},
+	marker::PhantomData,
+	str::FromStr,
+};
 
 use serde::{
 	de::{self, MapAccess, Visitor},
@@ -75,6 +79,19 @@ impl From<reqwest::Error> for ReqError {
 		Self::Reqwest(value)
 	}
 }
+
+impl Display for ReqError {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		use ReqError::*;
+
+		match self {
+			Api(Some(api_err)) => write!(f, "API Error: {}", api_err),
+			Api(None) => f.write_str("API Error! (No message)"),
+			Reqwest(req_err) => write!(f, "Reqwest Error: {}", req_err),
+		}
+	}
+}
+impl Error for ReqError {}
 
 #[derive(Debug, PartialEq, Eq, Deserialize)]
 #[serde(tag = "status", content = "data", rename_all = "camelCase")]
