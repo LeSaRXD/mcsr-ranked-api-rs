@@ -1,4 +1,11 @@
-use serde::Deserialize;
+use core::fmt;
+use std::{fmt::Debug, marker::PhantomData, str::FromStr};
+
+use serde::{
+	de::{self, MapAccess, Visitor},
+	Deserialize, Deserializer,
+};
+use uuid::Uuid;
 
 #[cfg(test)]
 mod tests;
@@ -82,5 +89,92 @@ impl<T> From<DeReqResult<T>> for ReqResult<T> {
 			DeReqResult::Success(t) => Ok(t),
 			DeReqResult::Error(e) => Err(ReqError::Api(e)),
 		}
+	}
+}
+
+/// Container for ranked and casual values
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+pub struct RankedAndCasual<T> {
+	ranked: T,
+	casual: T,
+}
+impl<T> RankedAndCasual<T> {
+	/// Value for ranked
+	pub fn ranked(&self) -> &T {
+		&self.ranked
+	}
+	/// Value for casual
+	pub fn casual(&self) -> &T {
+		&self.casual
+	}
+}
+
+/// Container for UUIDs and data of exactly two players
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct TwoUserData<T> {
+	user_1_uuid: Uuid,
+	user_1_data: T,
+	user_2_uuid: Uuid,
+	user_2_data: T,
+}
+impl<T> TwoUserData<T> {
+	/// First user's UUID and data
+	pub fn user_1(&self) -> (Uuid, &T) {
+		(self.user_1_uuid, &self.user_1_data)
+	}
+	/// Second users's UUID and data
+	pub fn user_2(&self) -> (Uuid, &T) {
+		(self.user_2_uuid, &self.user_2_data)
+	}
+}
+
+impl<'de, T: Deserialize<'de>> Deserialize<'de> for TwoUserData<T> {
+	fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+	where
+		D: Deserializer<'de>,
+	{
+		struct TwoUserDataVisitor<T> {
+			_phantom: PhantomData<T>,
+		}
+
+		impl<'de, T: Deserialize<'de>> Visitor<'de> for TwoUserDataVisitor<T> {
+			type Value = TwoUserData<T>;
+
+			fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+				formatter.write_str("struct TwoUserData")
+			}
+
+			fn visit_map<V>(self, mut map: V) -> Result<Self::Value, V::Error>
+			where
+				V: MapAccess<'de>,
+			{
+				let mut user_1 = None;
+				let mut user_2 = None;
+
+				while let Some(key) = map.next_key()? {
+					if let Ok(uuid) = Uuid::from_str(key) {
+						match (&user_1, &user_2) {
+							(None, None) => user_1 = Some((uuid, map.next_value()?)),
+							(Some(_), None) => user_2 = Some((uuid, map.next_value()?)),
+							_ => return Err(de::Error::duplicate_field("user_2")),
+						}
+					}
+				}
+
+				let user_1 = user_1.ok_or_else(|| de::Error::missing_field("user_1"))?;
+				let user_2 = user_2.ok_or_else(|| de::Error::missing_field("user_2"))?;
+
+				Ok(TwoUserData {
+					user_1_uuid: user_1.0,
+					user_1_data: user_1.1,
+					user_2_uuid: user_2.0,
+					user_2_data: user_2.1,
+				})
+			}
+		}
+
+		deserializer.deserialize_map(TwoUserDataVisitor {
+			_phantom: PhantomData::<T>,
+		})
 	}
 }

@@ -1,3 +1,5 @@
+use crate::types::RankedAndCasual;
+
 mod time {
 	use crate::types::Time;
 
@@ -68,4 +70,72 @@ mod api_result {
 			))
 		)
 	}
+}
+
+mod two_user_data {
+	use std::str::FromStr;
+
+	use serde::Deserialize;
+	use uuid::Uuid;
+
+	use crate::types::TwoUserData;
+
+	#[test]
+	fn simple() {
+		const JSON: &str =
+			r#"{"a0c06d33c69941d09b22e0c98c4233fd":2,"af22aaab9ee74596a3578bd6345d25b5":1}"#;
+		let data: TwoUserData<u32> = serde_json::from_str(JSON).unwrap();
+
+		assert_eq!(
+			data.user_1(),
+			(
+				Uuid::from_str("a0c06d33c69941d09b22e0c98c4233fd").unwrap(),
+				&2
+			),
+		);
+		assert_eq!(
+			data.user_2(),
+			(
+				Uuid::from_str("af22aaab9ee74596a3578bd6345d25b5").unwrap(),
+				&1
+			),
+		);
+	}
+
+	#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+	struct TestFlatten {
+		#[serde(flatten)]
+		two_user: TwoUserData<u32>,
+		total: u32,
+	}
+
+	#[test]
+	fn with_flatten() {
+		const JSON: &str = r#"{"a0c06d33c69941d09b22e0c98c4233fd":2,"af22aaab9ee74596a3578bd6345d25b5":1,"total":3}"#;
+		let data: TestFlatten = serde_json::from_str(JSON).unwrap();
+		assert_eq!(
+			data.two_user.user_1(),
+			(
+				Uuid::from_str("a0c06d33c69941d09b22e0c98c4233fd").unwrap(),
+				&2
+			)
+		);
+		assert_eq!(
+			data.two_user.user_2(),
+			(
+				Uuid::from_str("af22aaab9ee74596a3578bd6345d25b5").unwrap(),
+				&1
+			)
+		);
+		assert_eq!(data.total, 3);
+	}
+}
+
+#[test]
+fn ranked_and_casual() {
+	const JSON: &str = r#"{"ranked":2,"casual":1}"#;
+	let data: RankedAndCasual<u32> = serde_json::from_str(JSON).unwrap();
+
+	assert_eq!(data.ranked(), &2);
+	assert_eq!(data.casual(), &1);
 }
