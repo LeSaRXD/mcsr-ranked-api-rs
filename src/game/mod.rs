@@ -10,6 +10,7 @@ use crate::user::UserProfile;
 
 #[cfg(test)]
 mod tests;
+pub mod versus;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
