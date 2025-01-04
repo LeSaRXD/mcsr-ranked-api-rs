@@ -5,6 +5,7 @@ use crate::{
 	user::UserProfile,
 };
 
+pub mod requests;
 #[cfg(test)]
 mod tests;
 
