@@ -49,7 +49,7 @@ impl Time {
 
 #[doc(hidden)]
 /// Result with this crate's own `Error` type
-pub type ReqResult<T> = Result<T, ReqError>;
+pub type ReqResult<T, E = ReqError> = Result<T, E>;
 
 #[doc(hidden)]
 /// Error returned by a request to the API
