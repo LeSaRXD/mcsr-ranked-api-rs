@@ -3,11 +3,26 @@ use serde::Serialize;
 use crate::{
 	helpers::{make_request, make_request_blocking},
 	pagination::Pagination,
-	types::Season,
+	types::{MatchId, Season},
 	user::identifier::UserIdentifier,
 };
 
-use super::{MatchInfo, MatchType};
+use super::{AdvancedMatchInfo, MatchInfo, MatchType};
+
+const BASE_URL: &str = "https://mcsrranked.com/api/matches/{}";
+
+impl AdvancedMatchInfo {
+	pub async fn get_by_id(id: MatchId) -> crate::Result<Self> {
+		make_request(BASE_URL, [&id.to_string()], &None::<()>).await
+	}
+}
+
+#[cfg(feature = "blocking")]
+impl AdvancedMatchInfo {
+	pub fn get_by_id_blocking(id: MatchId) -> crate::Result<Self> {
+		make_request_blocking(BASE_URL, [&id.to_string()], &None::<()>)
+	}
+}
 
 const USER_URL: &str = "https://mcsrranked.com/api/users/{}/matches";
 
