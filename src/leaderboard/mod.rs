@@ -6,6 +6,8 @@ use crate::{
 };
 
 pub mod elo;
+pub mod phase;
+pub mod requests;
 
 /// Season result specific to leaderboards
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
@@ -40,7 +42,6 @@ pub struct LeaderboardUser {
 	profile: UserProfile,
 	season_result: LeaderboardSeasonResult,
 }
-
 impl LeaderboardUser {
 	/// Profile of the user
 	pub fn profile(&self) -> &UserProfile {
