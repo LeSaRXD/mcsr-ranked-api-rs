@@ -6,13 +6,15 @@ use uuid::Uuid;
 use crate::{
 	types::Time,
 	user::{SupporterTier, UserProfile},
-	weekly_race::{result::WeeklyRaceResult, SeedInfo, WeeklyRaceInfo, WeeklyRaceLeaderboardEntry},
+	weekly_race::{
+		result::WeeklyRaceResult, SeedInfo, WeeklyRaceLeaderboardInfo, WeeklyRaceLeaderboardRecord,
+	},
 };
 
 #[test]
 fn weekly_race() {
 	const JSON: &str = r#"{"id":13,"seed":{"overworld":"142605421743383832","nether":"142605421743383832","theEnd":"142605421743383832","rng":"142605421743383832"},"endsAt":1735516800,"leaderboard":[{"rank":1,"player":{"uuid":"4aed1e5e8f5c44e2bc0666e0c03781af","nickname":"nEmerald","roleType":0,"eloRate":1512,"eloRank":92},"time":324323,"replayExist":true},{"rank":2,"player":{"uuid":"92b63a39b36a445fa94c77ae212dcea3","nickname":"bing_pigs","roleType":0,"eloRate":1512,"eloRank":92},"time":345664,"replayExist":true},{"rank":3,"player":{"uuid":"5cd115f0ec1240659db152406c0984a3","nickname":"yjako","roleType":0,"eloRate":1512,"eloRank":92},"time":354563,"replayExist":false}]}"#;
-	let race = serde_json::from_str::<WeeklyRaceInfo>(JSON).unwrap();
+	let race = serde_json::from_str::<WeeklyRaceLeaderboardInfo>(JSON).unwrap();
 	assert_eq!(race.id, 13);
 	assert_eq!(
 		race.seed,
@@ -27,7 +29,7 @@ fn weekly_race() {
 	assert_eq!(
 		race.leaderboard(),
 		[
-			WeeklyRaceLeaderboardEntry {
+			WeeklyRaceLeaderboardRecord {
 				rank: 1,
 				player: UserProfile::new(
 					Uuid::from_str("4aed1e5e8f5c44e2bc0666e0c03781af").unwrap(),
@@ -39,7 +41,7 @@ fn weekly_race() {
 				time: Time(324323),
 				replay_exist: true,
 			},
-			WeeklyRaceLeaderboardEntry {
+			WeeklyRaceLeaderboardRecord {
 				rank: 2,
 				player: UserProfile::new(
 					Uuid::from_str("92b63a39b36a445fa94c77ae212dcea3").unwrap(),
@@ -51,7 +53,7 @@ fn weekly_race() {
 				time: Time(345664),
 				replay_exist: true,
 			},
-			WeeklyRaceLeaderboardEntry {
+			WeeklyRaceLeaderboardRecord {
 				rank: 3,
 				player: UserProfile::new(
 					Uuid::from_str("5cd115f0ec1240659db152406c0984a3").unwrap(),

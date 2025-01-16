@@ -9,6 +9,7 @@ use crate::{
 	user::UserProfile,
 };
 
+pub mod requests;
 pub mod result;
 #[cfg(test)]
 pub mod tests;
@@ -48,13 +49,13 @@ impl SeedInfo {
 /// Seeds for overworld, nether, end and RNG
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct WeeklyRaceLeaderboardEntry {
+pub struct WeeklyRaceLeaderboardRecord {
 	rank: Rank,
 	player: UserProfile,
 	time: Time,
 	replay_exist: bool,
 }
-impl WeeklyRaceLeaderboardEntry {
+impl WeeklyRaceLeaderboardRecord {
 	/// Entry's rank, 1-indexed
 	pub fn rank(&self) -> Rank {
 		self.rank
@@ -76,14 +77,14 @@ impl WeeklyRaceLeaderboardEntry {
 /// Weekly race info
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct WeeklyRaceInfo {
+pub struct WeeklyRaceLeaderboardInfo {
 	id: WeeklyRaceId,
 	seed: SeedInfo,
 	#[serde(with = "ts_seconds")]
 	ends_at: DateTime<Utc>,
-	leaderboard: Box<[WeeklyRaceLeaderboardEntry]>,
+	leaderboard: Box<[WeeklyRaceLeaderboardRecord]>,
 }
-impl WeeklyRaceInfo {
+impl WeeklyRaceLeaderboardInfo {
 	/// Id of the race, 1-indexed
 	pub fn id(&self) -> &WeeklyRaceId {
 		&self.id
@@ -97,7 +98,7 @@ impl WeeklyRaceInfo {
 		&self.ends_at
 	}
 	/// The leaderboard for the race
-	pub fn leaderboard(&self) -> &[WeeklyRaceLeaderboardEntry] {
+	pub fn leaderboard(&self) -> &[WeeklyRaceLeaderboardRecord] {
 		&self.leaderboard
 	}
 }
