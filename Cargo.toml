@@ -12,8 +12,9 @@ default = ["achievements", "matches", "weekly_races"]
 achievements = []
 matches = []
 weekly_races = []
+leaderboards = []
 blocking = []
-all = ["achievements", "matches", "weekly_races", "blocking"]
+all = ["achievements", "matches", "weekly_races", "blocking", "leaderboards"]
 
 [dependencies]
 chrono = { version = "0.4.39", features = ["serde"] }

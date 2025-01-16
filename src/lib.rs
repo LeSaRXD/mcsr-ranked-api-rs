@@ -3,6 +3,8 @@ pub mod achievement;
 #[cfg(feature = "matches")]
 pub mod game;
 pub(crate) mod helpers;
+#[cfg(feature = "leaderboards")]
+pub mod leaderboard;
 pub mod pagination;
 pub mod types;
 pub mod user;
