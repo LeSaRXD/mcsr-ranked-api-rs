@@ -6,6 +6,8 @@ use crate::{
 };
 
 pub mod elo;
+#[cfg(feature = "matches")]
+pub mod game;
 pub mod phase;
 pub mod requests;
 
