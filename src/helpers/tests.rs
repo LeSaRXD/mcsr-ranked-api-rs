@@ -14,7 +14,7 @@ fn construct() {
 	let url = construct_url(
 		BASE_URL,
 		[&"test_user"],
-		&Some(TestQueryParams {
+		Some(&TestQueryParams {
 			age: 19,
 			name: "laysar".to_owned(),
 		}),

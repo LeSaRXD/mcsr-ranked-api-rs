@@ -153,16 +153,16 @@ pub struct UserConnections {
 	youtube: Option<UserConnection>,
 }
 impl UserConnections {
-	pub fn discord(&self) -> &Option<UserConnection> {
-		&self.discord
+	pub fn discord(&self) -> Option<&UserConnection> {
+		self.discord.as_ref()
 	}
 
-	pub fn twitch(&self) -> &Option<UserConnection> {
-		&self.twitch
+	pub fn twitch(&self) -> Option<&UserConnection> {
+		self.twitch.as_ref()
 	}
 
-	pub fn youtube(&self) -> &Option<UserConnection> {
-		&self.youtube
+	pub fn youtube(&self) -> Option<&UserConnection> {
+		self.youtube.as_ref()
 	}
 }
 
@@ -214,12 +214,12 @@ impl UserSeasonResult {
 		&self.last
 	}
 	/// Highest ELO
-	pub fn highest(&self) -> &Option<Elo> {
-		&self.highest
+	pub fn highest(&self) -> Option<&Elo> {
+		self.highest.as_ref()
 	}
 	/// Lowest ELO
-	pub fn lowest(&self) -> &Option<Elo> {
-		&self.lowest
+	pub fn lowest(&self) -> Option<&Elo> {
+		self.lowest.as_ref()
 	}
 	/// Phase info
 	pub fn phases(&self) -> &[PhaseInfo] {
@@ -261,8 +261,8 @@ impl UserInfo {
 		&self.connections
 	}
 	/// User's elo and phase results
-	pub fn season_result(&self) -> &Option<UserSeasonResult> {
-		&self.season_result
+	pub fn season_result(&self) -> Option<&UserSeasonResult> {
+		self.season_result.as_ref()
 	}
 	#[cfg(feature = "weekly_races")]
 	/// User's weekly race stats

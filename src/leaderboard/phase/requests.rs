@@ -8,7 +8,7 @@ const BASE_URL: &str = "https://mcsrranked.com/api/phase-leaderboard";
 
 impl PhaseLeaderboardInfo {
 	/// GET the phase leaderboard using given `params`
-	pub async fn get(params: &Option<GetLeaderboardInfoParams>) -> crate::Result<Self> {
+	pub async fn get(params: Option<&GetLeaderboardInfoParams>) -> crate::Result<Self> {
 		make_request(BASE_URL, &[] as &[&str], params).await
 	}
 }
@@ -16,7 +16,7 @@ impl PhaseLeaderboardInfo {
 #[cfg(feature = "blocking")]
 impl PhaseLeaderboardInfo {
 	/// Synchronously GET the phase leaderboard using given `params`
-	pub fn get_blocking(params: &Option<GetLeaderboardInfoParams>) -> crate::Result<Self> {
+	pub fn get_blocking(params: Option<&GetLeaderboardInfoParams>) -> crate::Result<Self> {
 		make_request_blocking(BASE_URL, &[] as &[&str], params)
 	}
 }

@@ -48,7 +48,7 @@ where
 fn construct_url<'v, V, S>(
 	base: impl ToString,
 	variables: V,
-	params: &Option<impl Serialize>,
+	params: Option<&impl Serialize>,
 ) -> Box<str>
 where
 	V: IntoIterator<Item = &'v S>,
@@ -71,7 +71,7 @@ where
 pub(crate) async fn make_request<'v, T, V, S>(
 	base_url: &str,
 	variables: V,
-	params: &Option<impl Serialize>,
+	params: Option<&impl Serialize>,
 ) -> crate::Result<T>
 where
 	T: DeserializeOwned,
@@ -90,7 +90,7 @@ where
 pub(crate) fn make_request_blocking<'v, T, V, S>(
 	base_url: &str,
 	variables: V,
-	params: &Option<impl Serialize>,
+	params: Option<&impl Serialize>,
 ) -> crate::Result<T>
 where
 	T: DeserializeOwned,

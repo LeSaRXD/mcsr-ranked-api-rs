@@ -118,7 +118,7 @@ impl GetBestTimeLeaderboardParams {
 
 impl BestTimeLeaderboard {
 	/// GET the best time leaderboard using given `params`
-	pub async fn get(params: &Option<GetBestTimeLeaderboardParams>) -> crate::Result<Self> {
+	pub async fn get(params: Option<&GetBestTimeLeaderboardParams>) -> crate::Result<Self> {
 		make_request(BASE_URL, &[] as &[&str], params).await
 	}
 }
@@ -126,7 +126,7 @@ impl BestTimeLeaderboard {
 #[cfg(feature = "blocking")]
 impl BestTimeLeaderboard {
 	/// Synchronously GET the best time leaderboard using given `params`
-	pub fn get_blocking(params: &Option<GetBestTimeLeaderboardParams>) -> crate::Result<Self> {
+	pub fn get_blocking(params: Option<&GetBestTimeLeaderboardParams>) -> crate::Result<Self> {
 		make_request_blocking(BASE_URL, &[] as &[&str], params)
 	}
 }

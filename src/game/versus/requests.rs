@@ -26,7 +26,7 @@ impl VersusInfo {
 	pub async fn get_by_ids<'a>(
 		user_1: &UserIdentifier<'a>,
 		user_2: &UserIdentifier<'a>,
-		params: &Option<GetVersusInfoParams>,
+		params: Option<&GetVersusInfoParams>,
 	) -> crate::Result<Self> {
 		make_request(BASE_URL, [&user_1.to_string(), &user_2.to_string()], params).await
 	}
@@ -38,7 +38,7 @@ impl VersusInfo {
 	pub fn get_by_ids_blocking<'a>(
 		user_1: &UserIdentifier<'a>,
 		user_2: &UserIdentifier<'a>,
-		params: &Option<GetVersusInfoParams>,
+		params: Option<&GetVersusInfoParams>,
 	) -> crate::Result<Self> {
 		make_request_blocking(BASE_URL, [&user_1.to_string(), &user_2.to_string()], params)
 	}

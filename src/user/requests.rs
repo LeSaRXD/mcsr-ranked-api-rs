@@ -28,7 +28,7 @@ impl GetUserParams {
 impl UserIdentifier<'_> {
 	/// GET the user by identifier using given `params`
 	pub async fn get_user(&self, params: GetUserParams) -> crate::Result<UserInfo> {
-		make_request(BASE_URL, [&self.to_string()], &Some(params)).await
+		make_request(BASE_URL, [&self.to_string()], Some(&params)).await
 	}
 }
 
@@ -36,6 +36,6 @@ impl UserIdentifier<'_> {
 impl UserIdentifier<'_> {
 	/// Synchronously GET the user by identifier using given `params`
 	pub fn get_user_blocking(&self, params: GetUserParams) -> crate::Result<UserInfo> {
-		make_request_blocking(BASE_URL, [&self.to_string()], &Some(params))
+		make_request_blocking(BASE_URL, [&self.to_string()], Some(&params))
 	}
 }

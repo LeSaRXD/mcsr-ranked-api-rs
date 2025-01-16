@@ -15,14 +15,14 @@ const BASE_URL: &str = "https://mcsrranked.com/api/matches/{}";
 
 impl AdvancedMatchInfo {
 	pub async fn get_by_id(id: MatchId) -> crate::Result<Self> {
-		make_request(BASE_URL, [&id.to_string()], &None::<()>).await
+		make_request(BASE_URL, [&id.to_string()], None::<&()>).await
 	}
 }
 
 #[cfg(feature = "blocking")]
 impl AdvancedMatchInfo {
 	pub fn get_by_id_blocking(id: MatchId) -> crate::Result<Self> {
-		make_request_blocking(BASE_URL, [&id.to_string()], &None::<()>)
+		make_request_blocking(BASE_URL, [&id.to_string()], None::<&()>)
 	}
 }
 
@@ -51,7 +51,7 @@ impl UserIdentifier<'_> {
 	/// GET the user's matches by identifier using given `params`
 	pub async fn get_user_matches(
 		&self,
-		params: &Option<GetUserMatchesParams>,
+		params: Option<&GetUserMatchesParams>,
 	) -> crate::Result<Box<[MatchInfo]>> {
 		make_request(USER_URL, [&self.to_string()], params).await
 	}
@@ -62,7 +62,7 @@ impl UserIdentifier<'_> {
 	/// Synchronously GET the user's matches by identifier using given `params`
 	pub fn get_user_matches_blocking(
 		&self,
-		params: &Option<GetUserMatchesParams>,
+		params: Option<&GetUserMatchesParams>,
 	) -> crate::Result<Box<[MatchInfo]>> {
 		make_request_blocking(USER_URL, [&self.to_string()], params)
 	}
