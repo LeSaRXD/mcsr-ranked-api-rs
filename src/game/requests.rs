@@ -1,7 +1,9 @@
 use serde::Serialize;
 
+#[cfg(feature = "blocking")]
+use crate::helpers::make_request_blocking;
 use crate::{
-	helpers::{make_request, make_request_blocking},
+	helpers::make_request,
 	pagination::Pagination,
 	types::{MatchId, Season},
 	user::identifier::UserIdentifier,
@@ -45,7 +47,7 @@ impl From<Pagination> for GetUserMatchesParams {
 	}
 }
 
-impl<'a> UserIdentifier<'a> {
+impl UserIdentifier<'_> {
 	/// GET the user's matches by identifier using given `params`
 	pub async fn get_user_matches(
 		&self,
@@ -56,7 +58,7 @@ impl<'a> UserIdentifier<'a> {
 }
 
 #[cfg(feature = "blocking")]
-impl<'a> UserIdentifier<'a> {
+impl UserIdentifier<'_> {
 	/// Synchronously GET the user's matches by identifier using given `params`
 	pub fn get_user_matches_blocking(
 		&self,

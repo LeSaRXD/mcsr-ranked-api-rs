@@ -13,7 +13,7 @@ pub enum UserIdentifier<'a> {
 	/// User's discord snowflake id
 	DiscordId(u64),
 }
-impl<'a> Display for UserIdentifier<'a> {
+impl Display for UserIdentifier<'_> {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match &self {
 			UserIdentifier::Uuid(uuid) => write!(f, "{}", uuid),
@@ -23,7 +23,7 @@ impl<'a> Display for UserIdentifier<'a> {
 	}
 }
 
-impl<'a> Serialize for UserIdentifier<'a> {
+impl Serialize for UserIdentifier<'_> {
 	fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
 	where
 		S: serde::Serializer,

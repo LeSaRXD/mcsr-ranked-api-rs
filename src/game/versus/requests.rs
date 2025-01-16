@@ -1,10 +1,8 @@
 use serde::Serialize;
 
-use crate::{
-	helpers::{make_request, make_request_blocking},
-	types::Season,
-	user::identifier::UserIdentifier,
-};
+#[cfg(feature = "blocking")]
+use crate::helpers::make_request_blocking;
+use crate::{helpers::make_request, types::Season, user::identifier::UserIdentifier};
 
 use super::VersusInfo;
 

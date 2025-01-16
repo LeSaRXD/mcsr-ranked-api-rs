@@ -1,9 +1,8 @@
 use serde::Serialize;
 
-use crate::{
-	helpers::{make_request, make_request_blocking},
-	types::Season,
-};
+#[cfg(feature = "blocking")]
+use crate::helpers::make_request_blocking;
+use crate::{helpers::make_request, types::Season};
 
 use super::EloLeaderboardInfo;
 

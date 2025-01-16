@@ -86,6 +86,7 @@ where
 		.into()
 }
 
+#[cfg(feature = "blocking")]
 pub(crate) fn make_request_blocking<'v, T, V, S>(
 	base_url: &str,
 	variables: V,
