@@ -2,7 +2,7 @@ use serde::Serialize;
 
 #[cfg(feature = "blocking")]
 use crate::helpers::make_request_blocking;
-use crate::{helpers::make_request, types::Season};
+use crate::{helpers::make_request, types::Season, Result};
 
 use super::{identifier::UserIdentifier, info::UserInfo};
 
@@ -27,7 +27,7 @@ impl GetUserParams {
 
 impl UserIdentifier<'_> {
 	/// GET the user by identifier using given `params`
-	pub async fn get_user(&self, params: GetUserParams) -> crate::Result<UserInfo> {
+	pub async fn get_user(&self, params: GetUserParams) -> Result<UserInfo> {
 		make_request(BASE_URL, [&self.to_string()], Some(&params)).await
 	}
 }
@@ -35,7 +35,7 @@ impl UserIdentifier<'_> {
 #[cfg(feature = "blocking")]
 impl UserIdentifier<'_> {
 	/// Synchronously GET the user by identifier using given `params`
-	pub fn get_user_blocking(&self, params: GetUserParams) -> crate::Result<UserInfo> {
+	pub fn get_user_blocking(&self, params: GetUserParams) -> Result<UserInfo> {
 		make_request_blocking(BASE_URL, [&self.to_string()], Some(&params))
 	}
 }

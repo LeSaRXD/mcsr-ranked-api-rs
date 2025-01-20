@@ -19,9 +19,9 @@ mod api_result {
 	use serde::Deserialize;
 	use uuid::Uuid;
 
-	use crate::{types::DeReqResult, user::SupporterTier};
+	use crate::{types::DeResult, user::SupporterTier};
 
-	fn result_from<T>(json: &str) -> DeReqResult<T>
+	fn result_from<T>(json: &str) -> DeResult<T>
 	where
 		for<'de> T: Deserialize<'de>,
 	{
@@ -32,7 +32,7 @@ mod api_result {
 	fn empty_error() {
 		const JSON: &str = r#"{"status":"error","data":null}"#;
 		let result = result_from::<Option<()>>(JSON);
-		assert_eq!(result, DeReqResult::Error(None));
+		assert_eq!(result, DeResult::Error(None));
 	}
 
 	#[test]
@@ -42,7 +42,7 @@ mod api_result {
 		let result = result_from::<Option<()>>(JSON);
 		assert_eq!(
 			result,
-			DeReqResult::Error(Some("invalid `type` query. it must be >= 0 or <= 3".into()))
+			DeResult::Error(Some("invalid `type` query. it must be >= 0 or <= 3".into()))
 		);
 	}
 
@@ -50,7 +50,7 @@ mod api_result {
 	fn empty_ok() {
 		const JSON: &str = r#"{"status": "success", "data": null}"#;
 		let result = result_from::<Option<()>>(JSON);
-		assert_eq!(result, DeReqResult::Success(None));
+		assert_eq!(result, DeResult::Success(None));
 	}
 
 	#[test]
@@ -61,7 +61,7 @@ mod api_result {
 		let result = result_from::<UserProfile>(JSON);
 		assert_eq!(
 			result,
-			DeReqResult::Success(UserProfile::new(
+			DeResult::Success(UserProfile::new(
 				Uuid::from_str("7665f76f431b41c6b321bea16aff913b").unwrap(),
 				"lowk3y_",
 				SupporterTier::None,

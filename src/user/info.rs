@@ -202,13 +202,13 @@ pub struct PhaseInfo {
 /// Season result
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct UserSeasonResult {
+pub struct UserSeasonOutcome {
 	last: EloPointsInfo,
 	highest: Option<Elo>,
 	lowest: Option<Elo>,
 	phases: Box<[PhaseInfo]>,
 }
-impl UserSeasonResult {
+impl UserSeasonOutcome {
 	/// Last season's ELO info
 	pub fn last(&self) -> &EloPointsInfo {
 		&self.last
@@ -238,7 +238,7 @@ pub struct UserInfo {
 	timestamp: UserTimestamps,
 	statistics: UserStatistics,
 	connections: UserConnections,
-	season_result: Option<UserSeasonResult>,
+	season_result: Option<UserSeasonOutcome>,
 	#[cfg(feature = "weekly_races")]
 	weekly_races: Box<[WeeklyRaceResult]>,
 }
@@ -261,7 +261,7 @@ impl UserInfo {
 		&self.connections
 	}
 	/// User's elo and phase results
-	pub fn season_result(&self) -> Option<&UserSeasonResult> {
+	pub fn season_result(&self) -> Option<&UserSeasonOutcome> {
 		self.season_result.as_ref()
 	}
 	#[cfg(feature = "weekly_races")]

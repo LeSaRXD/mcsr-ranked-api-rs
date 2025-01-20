@@ -5,7 +5,7 @@ use uuid::Uuid;
 
 use super::{EloLeaderboardInfo, SeasonInfo};
 use crate::{
-	leaderboard::LeaderboardSeasonResult,
+	leaderboard::LeaderboardSeasonOutcome,
 	user::{SupporterTier, UserProfile},
 };
 
@@ -33,7 +33,7 @@ fn leaderboard() {
 	);
 	assert_eq!(
 		leaderboard.users[0].season_result,
-		LeaderboardSeasonResult {
+		LeaderboardSeasonOutcome {
 			elo: 2175,
 			rank: 1,
 			phase_point: 40,

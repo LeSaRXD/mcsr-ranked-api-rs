@@ -4,7 +4,7 @@ use serde::{
 	Deserialize, Deserializer, Serialize,
 };
 
-use crate::types::DeReqResult;
+use crate::{types::DeResult, Result};
 
 #[cfg(test)]
 mod tests;
@@ -72,7 +72,7 @@ pub(crate) async fn make_request<'v, T, V, S>(
 	base_url: &str,
 	variables: V,
 	params: Option<&impl Serialize>,
-) -> crate::Result<T>
+) -> Result<T>
 where
 	T: DeserializeOwned,
 	V: IntoIterator<Item = &'v S>,
@@ -81,7 +81,7 @@ where
 	let url = construct_url(base_url, variables, params);
 	reqwest::get(url.as_ref())
 		.await?
-		.json::<DeReqResult<T>>()
+		.json::<DeResult<T>>()
 		.await?
 		.into()
 }
@@ -91,7 +91,7 @@ pub(crate) fn make_request_blocking<'v, T, V, S>(
 	base_url: &str,
 	variables: V,
 	params: Option<&impl Serialize>,
-) -> crate::Result<T>
+) -> Result<T>
 where
 	T: DeserializeOwned,
 	V: IntoIterator<Item = &'v S>,
@@ -99,6 +99,6 @@ where
 {
 	let url = construct_url(base_url, variables, params);
 	reqwest::blocking::get(url.as_ref())?
-		.json::<DeReqResult<T>>()?
+		.json::<DeResult<T>>()?
 		.into()
 }

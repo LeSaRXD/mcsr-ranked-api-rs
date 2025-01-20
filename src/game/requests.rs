@@ -7,6 +7,7 @@ use crate::{
 	pagination::Pagination,
 	types::{MatchId, Season},
 	user::identifier::UserIdentifier,
+	Result,
 };
 
 use super::{AdvancedMatchInfo, MatchInfo, MatchType};
@@ -14,14 +15,14 @@ use super::{AdvancedMatchInfo, MatchInfo, MatchType};
 const BASE_URL: &str = "https://mcsrranked.com/api/matches/{}";
 
 impl AdvancedMatchInfo {
-	pub async fn get_by_id(id: MatchId) -> crate::Result<Self> {
+	pub async fn get_by_id(id: MatchId) -> Result<Self> {
 		make_request(BASE_URL, [&id.to_string()], None::<&()>).await
 	}
 }
 
 #[cfg(feature = "blocking")]
 impl AdvancedMatchInfo {
-	pub fn get_by_id_blocking(id: MatchId) -> crate::Result<Self> {
+	pub fn get_by_id_blocking(id: MatchId) -> Result<Self> {
 		make_request_blocking(BASE_URL, [&id.to_string()], None::<&()>)
 	}
 }
@@ -52,7 +53,7 @@ impl UserIdentifier<'_> {
 	pub async fn get_user_matches(
 		&self,
 		params: Option<&GetUserMatchesParams>,
-	) -> crate::Result<Box<[MatchInfo]>> {
+	) -> Result<Box<[MatchInfo]>> {
 		make_request(USER_URL, [&self.to_string()], params).await
 	}
 }
@@ -63,7 +64,7 @@ impl UserIdentifier<'_> {
 	pub fn get_user_matches_blocking(
 		&self,
 		params: Option<&GetUserMatchesParams>,
-	) -> crate::Result<Box<[MatchInfo]>> {
+	) -> Result<Box<[MatchInfo]>> {
 		make_request_blocking(USER_URL, [&self.to_string()], params)
 	}
 }

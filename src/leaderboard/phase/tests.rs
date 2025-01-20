@@ -6,7 +6,7 @@ use uuid::Uuid;
 use crate::{
 	leaderboard::{
 		phase::{PhaseInfo, PhaseLeaderboardInfo},
-		LeaderboardSeasonResult, LeaderboardUser,
+		LeaderboardSeasonOutcome, LeaderboardUser,
 	},
 	user::{SupporterTier, UserProfile},
 };
@@ -34,7 +34,7 @@ fn leaderboard() {
 				Some(1966),
 				Some(4),
 			),
-			season_result: LeaderboardSeasonResult {
+			season_result: LeaderboardSeasonOutcome {
 				elo: 1966,
 				rank: 4,
 				phase_point: 50

@@ -18,8 +18,8 @@ pub enum AchievementData {
 	PlayedMatches,
 	Playtime,
 	Wins,
-	SeasonResult { season: Season, rank: Rank },
-	PlayoffsResult { season: Season },
+	SeasonOutcome { season: Season, rank: Rank },
+	PlayoffsOutcome { season: Season },
 	WeeklyRace { count: u16 },
 	Secret { id: Box<str>, data: Box<[Box<str>]> },
 }
@@ -150,7 +150,7 @@ impl<'de> Deserialize<'de> for Achievement {
 					"seasonResult" => match data.as_ref() {
 						[season_str, rank_str] => match (season_str.parse(), rank_str.parse()) {
 							(Ok(season), Ok(rank)) => {
-								Ok(AchievementData::SeasonResult { season, rank })
+								Ok(AchievementData::SeasonOutcome { season, rank })
 							}
 							(Err(_), _) => Err(de::Error::invalid_type(
 								de::Unexpected::Str(season_str),
@@ -165,7 +165,7 @@ impl<'de> Deserialize<'de> for Achievement {
 					},
 					"playoffsResult" => match data.as_ref() {
 						[season_str] => match season_str.parse() {
-							Ok(season) => Ok(PlayoffsResult { season }),
+							Ok(season) => Ok(PlayoffsOutcome { season }),
 							Err(_) => Err(de::Error::invalid_type(
 								de::Unexpected::Str(season_str),
 								&"season number",

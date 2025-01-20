@@ -5,8 +5,8 @@ use uuid::Uuid;
 
 use crate::{
 	game::{
-		AdvancedMatchInfo, BastionType, MatchCategory, MatchCompletion, MatchEloUpdate, MatchRank,
-		MatchResult, MatchTimelineEvent, MatchType, SeedType,
+		AdvancedMatchInfo, BastionType, MatchCategory, MatchCompletion, MatchEloUpdate,
+		MatchOutcome, MatchRank, MatchTimelineEvent, MatchType, SeedType,
 	},
 	types::Time,
 	user::{SupporterTier, UserProfile},
@@ -45,7 +45,7 @@ fn match_info() {
 	assert_eq!(info.spectators(), []);
 	assert_eq!(
 		info.result,
-		MatchResult {
+		MatchOutcome {
 			winner_uuid: Some(Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap()),
 			time: Time(620128),
 		}

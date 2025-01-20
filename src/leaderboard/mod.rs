@@ -14,14 +14,14 @@ pub mod requests;
 /// Season result specific to leaderboards
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct LeaderboardSeasonResult {
+pub struct LeaderboardSeasonOutcome {
 	#[serde(rename = "eloRate")]
 	elo: Elo,
 	#[serde(rename = "eloRank")]
 	rank: Rank,
 	phase_point: PhasePoints,
 }
-impl LeaderboardSeasonResult {
+impl LeaderboardSeasonOutcome {
 	/// Elo of the user
 	pub fn elo(&self) -> Elo {
 		self.elo
@@ -42,7 +42,7 @@ impl LeaderboardSeasonResult {
 pub struct LeaderboardUser {
 	#[serde(flatten)]
 	profile: UserProfile,
-	season_result: LeaderboardSeasonResult,
+	season_result: LeaderboardSeasonOutcome,
 }
 impl LeaderboardUser {
 	/// Profile of the user
@@ -50,7 +50,7 @@ impl LeaderboardUser {
 		&self.profile
 	}
 	/// Season result of the user
-	pub fn season_result(&self) -> &LeaderboardSeasonResult {
+	pub fn season_result(&self) -> &LeaderboardSeasonOutcome {
 		&self.season_result
 	}
 }

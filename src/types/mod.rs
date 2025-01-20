@@ -1,5 +1,4 @@
 use std::{
-	error::Error,
 	fmt::{self, Display},
 	marker::PhantomData,
 	str::FromStr,
@@ -48,22 +47,22 @@ impl Time {
 }
 
 #[doc(hidden)]
-/// Result with this crate's own `Error` type
-pub type ReqResult<T, E = ReqError> = Result<T, E>;
+/// Result with this crate's own `Error` type as default
+pub type Result<T, E = Error> = std::result::Result<T, E>;
 
 #[doc(hidden)]
 /// Error returned by a request to the API
 #[derive(Debug)]
-pub enum ReqError {
+pub enum Error {
 	/// Ranked API error
 	Api(Option<Box<str>>),
 	/// Reqwest library error
 	Reqwest(reqwest::Error),
 }
 
-impl PartialEq for ReqError {
+impl PartialEq for Error {
 	fn eq(&self, other: &Self) -> bool {
-		use ReqError::*;
+		use Error::*;
 
 		match (self, other) {
 			(Api(lhs), Api(rhs)) => lhs == rhs,
@@ -72,17 +71,17 @@ impl PartialEq for ReqError {
 		}
 	}
 }
-impl Eq for ReqError {}
+impl Eq for Error {}
 
-impl From<reqwest::Error> for ReqError {
+impl From<reqwest::Error> for Error {
 	fn from(value: reqwest::Error) -> Self {
 		Self::Reqwest(value)
 	}
 }
 
-impl Display for ReqError {
+impl Display for Error {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		use ReqError::*;
+		use Error::*;
 
 		match self {
 			Api(Some(api_err)) => write!(f, "API Error: {}", api_err),
@@ -91,20 +90,20 @@ impl Display for ReqError {
 		}
 	}
 }
-impl Error for ReqError {}
+impl std::error::Error for Error {}
 
 #[derive(Debug, PartialEq, Eq, Deserialize)]
 #[serde(tag = "status", content = "data", rename_all = "camelCase")]
-pub(crate) enum DeReqResult<T> {
+pub(crate) enum DeResult<T> {
 	Success(T),
 	Error(Option<Box<str>>),
 }
 
-impl<T> From<DeReqResult<T>> for ReqResult<T> {
-	fn from(value: DeReqResult<T>) -> Self {
+impl<T> From<DeResult<T>> for Result<T> {
+	fn from(value: DeResult<T>) -> Self {
 		match value {
-			DeReqResult::Success(t) => Ok(t),
-			DeReqResult::Error(e) => Err(ReqError::Api(e)),
+			DeResult::Success(t) => Ok(t),
+			DeResult::Error(e) => Err(Error::Api(e)),
 		}
 	}
 }

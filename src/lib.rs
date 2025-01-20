@@ -11,5 +11,5 @@ pub mod user;
 #[cfg(feature = "weekly_races")]
 pub mod weekly_race;
 
-pub use types::ReqError as Error;
-pub use types::ReqResult as Result;
+pub use types::Error;
+pub use types::Result;

@@ -2,7 +2,7 @@ use serde::Serialize;
 
 #[cfg(feature = "blocking")]
 use crate::helpers::make_request_blocking;
-use crate::{helpers::make_request, types::Season, user::identifier::UserIdentifier};
+use crate::{helpers::make_request, types::Season, user::identifier::UserIdentifier, Result};
 
 use super::VersusInfo;
 
@@ -27,7 +27,7 @@ impl VersusInfo {
 		user_1: &UserIdentifier<'a>,
 		user_2: &UserIdentifier<'a>,
 		params: Option<&GetVersusInfoParams>,
-	) -> crate::Result<Self> {
+	) -> Result<Self> {
 		make_request(BASE_URL, [&user_1.to_string(), &user_2.to_string()], params).await
 	}
 }
@@ -39,7 +39,7 @@ impl VersusInfo {
 		user_1: &UserIdentifier<'a>,
 		user_2: &UserIdentifier<'a>,
 		params: Option<&GetVersusInfoParams>,
-	) -> crate::Result<Self> {
+	) -> Result<Self> {
 		make_request_blocking(BASE_URL, [&user_1.to_string(), &user_2.to_string()], params)
 	}
 }

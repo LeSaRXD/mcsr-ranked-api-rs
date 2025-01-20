@@ -54,12 +54,12 @@ pub enum MatchType {
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct MatchResult {
+pub struct MatchOutcome {
 	#[serde(rename = "uuid")]
 	winner_uuid: Option<Uuid>,
 	time: Time,
 }
-impl MatchResult {
+impl MatchOutcome {
 	pub fn winner_uuid(&self) -> Option<Uuid> {
 		self.winner_uuid
 	}
@@ -186,7 +186,7 @@ pub struct MatchInfo {
 	date: DateTime<Utc>,
 	players: Box<[UserProfile]>,
 	spectators: Box<[UserProfile]>,
-	result: MatchResult,
+	result: MatchOutcome,
 	forfeited: bool,
 	decayed: bool,
 	rank: MatchRank,
@@ -224,7 +224,7 @@ impl MatchInfo {
 		&self.spectators
 	}
 	/// The outcome of the match
-	pub fn result(&self) -> &MatchResult {
+	pub fn result(&self) -> &MatchOutcome {
 		&self.result
 	}
 	/// Whether the match ended by forfeit or not

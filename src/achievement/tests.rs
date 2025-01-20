@@ -90,7 +90,7 @@ fn season_result_ok() {
 		achievment_from(JSON),
 		Achievement {
 			date: Utc.timestamp_opt(1724198414, 0).unwrap(),
-			data: AchievementData::SeasonResult { season: 5, rank: 2 },
+			data: AchievementData::SeasonOutcome { season: 5, rank: 2 },
 			level: 2,
 			goal: None,
 		}
