@@ -2,6 +2,11 @@
 name = "mcsr-ranked-api"
 version = "0.1.0"
 edition = "2021"
+description = "MCSR Ranked API wrapper in Rust"
+license = "MIT"
+license-file = "LICENSE.txt"
+repository = "https://github.com/LeSaRXD/mcsr-ranked-api-rs"
+readme = "README.md"
 
 [lib]
 name = "mcsr_ranked_api"
