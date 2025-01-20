@@ -21,6 +21,17 @@ pub enum AchievementData {
 	SeasonOutcome { season: Season, rank: Rank },
 	PlayoffsOutcome { season: Season },
 	WeeklyRace { count: u16 },
+	SummonWither,
+	IronPickless,
+	Oneshot,
+	Overtake,
+	Foodless,
+	ClassicRun,
+	Netherite,
+	Armorless,
+	HighLevel,
+	EgapHolder,
+	IronHoe,
 	Secret { id: Box<str>, data: Box<[Box<str>]> },
 }
 
@@ -142,46 +153,67 @@ impl<'de> Deserialize<'de> for Achievement {
 				let level = level.ok_or_else(|| de::Error::missing_field("level"))?;
 
 				let achievment_data = match id.as_ref() {
-					"bestTime" => Ok(BestTime),
-					"highestWinStreak" => Ok(HighestWinStreak),
-					"playedMatches" => Ok(PlayedMatches),
-					"playtime" => Ok(Playtime),
-					"wins" => Ok(Wins),
+					"bestTime" => BestTime,
+					"highestWinStreak" => HighestWinStreak,
+					"playedMatches" => PlayedMatches,
+					"playtime" => Playtime,
+					"wins" => Wins,
 					"seasonResult" => match data.as_ref() {
 						[season_str, rank_str] => match (season_str.parse(), rank_str.parse()) {
 							(Ok(season), Ok(rank)) => {
-								Ok(AchievementData::SeasonOutcome { season, rank })
+								AchievementData::SeasonOutcome { season, rank }
 							}
-							(Err(_), _) => Err(de::Error::invalid_type(
-								de::Unexpected::Str(season_str),
-								&"season number",
-							)),
-							(_, Err(_)) => Err(de::Error::invalid_type(
-								de::Unexpected::Str(rank_str),
-								&"rank number",
-							)),
+							(Err(_), _) => {
+								return Err(de::Error::invalid_type(
+									de::Unexpected::Str(season_str),
+									&"season number",
+								))
+							}
+							(_, Err(_)) => {
+								return Err(de::Error::invalid_type(
+									de::Unexpected::Str(rank_str),
+									&"rank number",
+								))
+							}
 						},
-						other_data => Err(de::Error::invalid_length(other_data.len(), &"2")),
+						other_data => {
+							return Err(de::Error::invalid_length(other_data.len(), &"2"))
+						}
 					},
 					"playoffsResult" => match data.as_ref() {
 						[season_str] => match season_str.parse() {
-							Ok(season) => Ok(PlayoffsOutcome { season }),
-							Err(_) => Err(de::Error::invalid_type(
-								de::Unexpected::Str(season_str),
-								&"season number",
-							)),
+							Ok(season) => PlayoffsOutcome { season },
+							Err(_) => {
+								return Err(de::Error::invalid_type(
+									de::Unexpected::Str(season_str),
+									&"season number",
+								))
+							}
 						},
-						other_data => Err(de::Error::invalid_length(other_data.len(), &"1")),
+						other_data => {
+							return Err(de::Error::invalid_length(other_data.len(), &"1"))
+						}
 					},
-					other_id => Ok(Secret {
+					"summonWither" => SummonWither,
+					"ironPickless" => IronPickless,
+					"oneshot" => Oneshot,
+					"overtake" => Overtake,
+					"foodless" => Foodless,
+					"classicRun" => ClassicRun,
+					"netherite" => Netherite,
+					"armorless" => Armorless,
+					"highLevel" => HighLevel,
+					"egapHolder" => EgapHolder,
+					"ironHoe" => IronHoe,
+					other_id => Secret {
 						id: other_id.into(),
 						data,
-					}),
+					},
 				};
 
 				Ok(Achievement {
 					date,
-					data: achievment_data?,
+					data: achievment_data,
 					level,
 					goal,
 				})
