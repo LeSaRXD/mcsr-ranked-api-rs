@@ -1,10 +1,15 @@
+use std::num::NonZeroU8;
+
 use super::{Pagination, PaginationError};
 
 #[test]
 fn new_ok() {
 	assert_eq!(
 		Pagination::new(32, 5).unwrap(),
-		Pagination { page: 32, count: 5 }
+		Pagination {
+			page: 32,
+			count: const { NonZeroU8::new(5).unwrap() }
+		}
 	);
 }
 

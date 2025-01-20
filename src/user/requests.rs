@@ -8,7 +8,7 @@ use super::{identifier::UserIdentifier, info::UserInfo};
 
 const BASE_URL: &str = "https://mcsrranked.com/api/users/{}";
 
-/// Parameters for [UserIdentifier::get_user]
+/// Parameters for [`UserIdentifier::get_user`]
 #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize)]
 #[serde(rename_all = "lowercase")]
 pub struct GetUserParams {

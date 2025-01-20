@@ -68,7 +68,7 @@ impl From<Option<Season>> for BestTimeSeason {
 	}
 }
 
-/// Params for getting the best time leaderboard
+/// Parameters for [`super::BestTimeLeaderboard::get`]
 ///
 /// Note: this struct supports the builder pattern
 ///

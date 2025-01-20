@@ -8,6 +8,7 @@ use super::VersusInfo;
 
 const BASE_URL: &str = "https://mcsrranked.com/api/users/{}/versus/{}";
 
+/// Parameters for [`VersusInfo::get_by_ids`]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct GetVersusInfoParams {

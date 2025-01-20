@@ -1,4 +1,4 @@
-use std::{error::Error, fmt::Display};
+use std::{error::Error, fmt::Display, num::NonZeroU8};
 
 use serde::Serialize;
 
@@ -37,12 +37,15 @@ pub struct Pagination {
 	/// Item count
 	///
 	/// Default is 10
-	count: u8,
+	count: NonZeroU8,
 }
 
 impl Default for Pagination {
 	fn default() -> Self {
-		Self { page: 0, count: 10 }
+		Self {
+			page: 0,
+			count: const { NonZeroU8::new(10).unwrap() },
+		}
 	}
 }
 
@@ -54,8 +57,9 @@ impl Pagination {
 	///
 	/// The `count` must be within the range \[1; 50\] inclusive
 	pub fn new(page: u8, count: u8) -> Result<Self, PaginationError> {
-		match (page, count) {
-			(0..=99, 1..=50) => Ok(Self { page, count }),
+		let opt_count = NonZeroU8::new(count);
+		match (page, opt_count.map(|c| (c, c.get()))) {
+			(0..=99, Some((count, 1..=50))) => Ok(Self { page, count }),
 			(0..=99, _) => Err(PaginationError::Count(count)),
 			(_, _) => Err(PaginationError::Page(page)),
 		}
@@ -74,8 +78,9 @@ impl Pagination {
 
 	/// Try to crerate a new pagination with just the item `count`
 	pub fn count(count: u8) -> Result<Self, PaginationError> {
-		match count {
-			1..=50 => Ok(Self {
+		let opt_count = NonZeroU8::new(count);
+		match opt_count.map(|c| (c, c.get())) {
+			Some((count, 1..=50)) => Ok(Self {
 				count,
 				..Default::default()
 			}),
@@ -92,6 +97,9 @@ impl Pagination {
 	///
 	/// Breaking these bounds will result in a
 	pub unsafe fn new_unchecked(page: u8, count: u8) -> Self {
-		Self { page, count }
+		Self {
+			page,
+			count: unsafe { NonZeroU8::new_unchecked(count) },
+		}
 	}
 }

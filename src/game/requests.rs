@@ -29,6 +29,7 @@ impl AdvancedMatchInfo {
 
 const USER_URL: &str = "https://mcsrranked.com/api/users/{}/matches";
 
+/// Parameters for [`UserIdentifier::get_user_matches`]
 #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize)]
 #[serde(rename_all = "lowercase")]
 pub struct GetUserMatchesParams {
