@@ -35,13 +35,35 @@ pub enum AchievementData {
 	Secret { id: Box<str>, data: Box<[Box<str>]> },
 }
 
+pub type AchievementLevel = u64;
+pub type AchievementGoal = u64;
+
 /// User's achievement. `data` contains achievement type and associated data
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Achievement {
 	date: DateTime<Utc>,
 	data: AchievementData,
-	level: u64,
-	goal: Option<u64>,
+	level: AchievementLevel,
+	goal: Option<AchievementGoal>,
+}
+
+impl Achievement {
+	/// The date the achievement was acquired
+	pub fn date(&self) -> DateTime<Utc> {
+		self.date
+	}
+	/// The type and data of the achievement
+	pub fn data(&self) -> &AchievementData {
+		&self.data
+	}
+	/// The level of the achievement
+	pub fn level(&self) -> AchievementLevel {
+		self.level
+	}
+	/// The goal to level up the achievement
+	pub fn goal(&self) -> Option<AchievementGoal> {
+		self.goal
+	}
 }
 
 impl<'de> Deserialize<'de> for Achievement {
