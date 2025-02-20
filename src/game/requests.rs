@@ -13,7 +13,7 @@ use crate::{
 
 use super::{AdvancedMatchInfo, MatchInfo, MatchType};
 
-const BASE_URL: &str = "https://mcsrranked.com/api/matches/{}";
+const BASE_URL: &str = "https://api.mcsrranked.com/matches/{}";
 
 impl AdvancedMatchInfo {
 	pub async fn get_by_id(id: MatchId) -> Result<Self> {
@@ -28,7 +28,7 @@ impl AdvancedMatchInfo {
 	}
 }
 
-const USER_URL: &str = "https://mcsrranked.com/api/users/{}/matches";
+const USER_URL: &str = "https://api.mcsrranked.com/users/{}/matches";
 
 /// Parameters for [`UserIdentifier::get_user_matches`]
 #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize)]
@@ -71,7 +71,7 @@ impl UserIdentifier<'_> {
 	}
 }
 
-const RECENT_URL: &str = "https://mcsrranked.com/api/matches/";
+const RECENT_URL: &str = "https://api.mcsrranked.com/matches/";
 
 /// Parameters for [`MatchInfo::get_recent`]
 ///

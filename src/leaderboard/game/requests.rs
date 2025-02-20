@@ -8,7 +8,7 @@ use crate::{helpers::make_request, types::Season, Result};
 
 use super::BestTimeLeaderboard;
 
-const BASE_URL: &str = "https://mcsrranked.com/api/record-leaderboard";
+const BASE_URL: &str = "https://api.mcsrranked.com/record-leaderboard";
 
 /// Season(s) parameter to fetch best times
 ///

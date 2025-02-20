@@ -4,7 +4,7 @@ use crate::{helpers::make_request, leaderboard::requests::GetLeaderboardInfoPara
 
 use super::EloLeaderboardInfo;
 
-const BASE_URL: &str = "https://mcsrranked.com/api/leaderboard";
+const BASE_URL: &str = "https://api.mcsrranked.com/leaderboard";
 
 impl EloLeaderboardInfo {
 	/// GET the user leaderboard using given `params`

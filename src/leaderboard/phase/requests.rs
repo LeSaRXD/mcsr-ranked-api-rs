@@ -4,7 +4,7 @@ use crate::{helpers::make_request, leaderboard::requests::GetLeaderboardInfoPara
 
 use super::PhaseLeaderboardInfo;
 
-const BASE_URL: &str = "https://mcsrranked.com/api/phase-leaderboard";
+const BASE_URL: &str = "https://api.mcsrranked.com/phase-leaderboard";
 
 impl PhaseLeaderboardInfo {
 	/// GET the phase leaderboard using given `params`

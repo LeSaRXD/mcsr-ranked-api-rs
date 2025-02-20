@@ -4,7 +4,7 @@ use crate::{helpers::make_request, types::WeeklyRaceId, Result};
 
 use super::WeeklyRaceLeaderboardInfo;
 
-const BASE_URL: &str = "https://mcsrranked.com/api/weekly-race/{}";
+const BASE_URL: &str = "https://api.mcsrranked.com/weekly-race/{}";
 
 impl WeeklyRaceLeaderboardInfo {
 	/// GET the weekly race leaderboard using given weekly `race_id`

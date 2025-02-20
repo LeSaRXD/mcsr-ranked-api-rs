@@ -6,7 +6,7 @@ use crate::{helpers::make_request, types::Season, user::identifier::UserIdentifi
 
 use super::VersusInfo;
 
-const BASE_URL: &str = "https://mcsrranked.com/api/users/{}/versus/{}";
+const BASE_URL: &str = "https://api.mcsrranked.com/users/{}/versus/{}";
 
 /// Parameters for [`VersusInfo::get_by_ids`]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
