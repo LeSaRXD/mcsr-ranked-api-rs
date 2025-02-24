@@ -11,7 +11,7 @@ use crate::{
 
 #[test]
 fn leaderboard() {
-	const JSON: &str = r#"[{"rank":1,"season":1,"date":1685157577,"id":284288,"time":433388,"user":{"uuid":"08476f5847fc4daeba74a2544fc9d65b","nickname":"Zylenox","roleType":0,"eloRate":1523,"eloRank":90}},{"rank":2,"season":1,"date":1685696875,"id":300983,"time":457763,"user":{"uuid":"17e787d1d6374f818b294f2319db370d","nickname":"silverrruns","roleType":0,"eloRate":1818,"eloRank":15}}]"#;
+	const JSON: &str = r#"[{"rank":1,"season":1,"date":1685157577,"id":284288,"time":433388,"user":{"uuid":"08476f5847fc4daeba74a2544fc9d65b","nickname":"Zylenox","roleType":0,"eloRate":1523,"eloRank":90},"country":"us"},{"rank":2,"season":1,"date":1685696875,"id":300983,"time":457763,"user":{"uuid":"17e787d1d6374f818b294f2319db370d","nickname":"silverrruns","roleType":0,"eloRate":1818,"eloRank":15},"country":null}]"#;
 	let leaderboard: BestTimeLeaderboard = serde_json::from_str(JSON).unwrap();
 
 	assert_eq!(
@@ -27,7 +27,8 @@ fn leaderboard() {
 				"Zylenox",
 				SupporterTier::None,
 				Some(1523),
-				Some(90)
+				Some(90),
+				None,
 			),
 		}
 	);
@@ -44,7 +45,8 @@ fn leaderboard() {
 				"silverrruns",
 				SupporterTier::None,
 				Some(1818),
-				Some(15)
+				Some(15),
+				None,
 			),
 		}
 	);

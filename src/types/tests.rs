@@ -57,7 +57,7 @@ mod api_result {
 	fn user_ok() {
 		use crate::user::UserProfile;
 
-		const JSON: &str = r#"{"status":"success","data":{"uuid":"7665f76f431b41c6b321bea16aff913b","nickname":"lowk3y_","roleType":0,"eloRate":1966,"eloRank":4}}"#;
+		const JSON: &str = r#"{"status":"success","data":{"uuid":"7665f76f431b41c6b321bea16aff913b","nickname":"lowk3y_","roleType":0,"eloRate":1966,"eloRank":4,"country":null}}"#;
 		let result = result_from::<UserProfile>(JSON);
 		assert_eq!(
 			result,
@@ -66,7 +66,8 @@ mod api_result {
 				"lowk3y_",
 				SupporterTier::None,
 				Some(1966),
-				Some(4)
+				Some(4),
+				None,
 			))
 		)
 	}

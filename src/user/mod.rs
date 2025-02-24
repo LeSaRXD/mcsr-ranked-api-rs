@@ -31,6 +31,7 @@ pub struct UserProfile {
 	elo: Option<Elo>,
 	#[serde(rename = "eloRank")]
 	rank: Option<Rank>,
+	country: Option<Box<str>>,
 }
 
 impl UserProfile {
@@ -38,16 +39,18 @@ impl UserProfile {
 	pub(crate) fn new(
 		uuid: Uuid,
 		name: &str,
-		role_type: SupporterTier,
-		elo_rate: Option<Elo>,
-		elo_rank: Option<Rank>,
+		supporter_tier: SupporterTier,
+		elo: Option<Elo>,
+		rank: Option<Rank>,
+		country: Option<&str>,
 	) -> Self {
 		Self {
 			uuid,
 			nickname: name.into(),
-			supporter_tier: role_type,
-			elo: elo_rate,
-			rank: elo_rank,
+			supporter_tier,
+			elo,
+			rank,
+			country: country.map(Into::into),
 		}
 	}
 	/// The user's minecraft UUID
