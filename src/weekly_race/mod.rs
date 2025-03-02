@@ -17,7 +17,7 @@ pub mod tests;
 /// Seeds for overworld, nether, end and RNG
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct SeedInfo {
+pub struct WeeklyRaceSeedInfo {
 	#[serde(deserialize_with = "string_u64")]
 	overworld: MinecraftSeed,
 	#[serde(deserialize_with = "string_u64")]
@@ -27,7 +27,7 @@ pub struct SeedInfo {
 	#[serde(deserialize_with = "string_u64")]
 	rng: MinecraftSeed,
 }
-impl SeedInfo {
+impl WeeklyRaceSeedInfo {
 	/// Overworld dimension seed
 	pub fn overworld(&self) -> MinecraftSeed {
 		self.overworld
@@ -79,7 +79,7 @@ impl WeeklyRaceLeaderboardRecord {
 #[serde(rename_all = "camelCase")]
 pub struct WeeklyRaceLeaderboardInfo {
 	id: WeeklyRaceId,
-	seed: SeedInfo,
+	seed: WeeklyRaceSeedInfo,
 	#[serde(with = "ts_seconds")]
 	ends_at: DateTime<Utc>,
 	leaderboard: Box<[WeeklyRaceLeaderboardRecord]>,
@@ -90,7 +90,7 @@ impl WeeklyRaceLeaderboardInfo {
 		&self.id
 	}
 	/// The seeds for different dimensions and RNG
-	pub fn seeds(&self) -> &SeedInfo {
+	pub fn seeds(&self) -> &WeeklyRaceSeedInfo {
 		&self.seed
 	}
 	/// The end date and time

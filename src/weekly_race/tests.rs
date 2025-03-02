@@ -7,7 +7,8 @@ use crate::{
 	types::Time,
 	user::{SupporterTier, UserProfile},
 	weekly_race::{
-		result::WeeklyRaceResult, SeedInfo, WeeklyRaceLeaderboardInfo, WeeklyRaceLeaderboardRecord,
+		result::WeeklyRaceResult, WeeklyRaceLeaderboardInfo, WeeklyRaceLeaderboardRecord,
+		WeeklyRaceSeedInfo,
 	},
 };
 
@@ -18,7 +19,7 @@ fn weekly_race() {
 	assert_eq!(race.id, 13);
 	assert_eq!(
 		race.seed,
-		SeedInfo {
+		WeeklyRaceSeedInfo {
 			overworld: 142605421743383832,
 			nether: 142605421743383832,
 			the_end: 142605421743383832,

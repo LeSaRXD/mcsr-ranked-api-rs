@@ -13,7 +13,7 @@ pub struct WeeklyRaceResult {
 	rank: Rank,
 }
 impl WeeklyRaceResult {
-	/// Race ID, 1-indexed
+	/// WeeklyRace ID, 1-indexed
 	pub fn id(&self) -> WeeklyRaceId {
 		self.id
 	}

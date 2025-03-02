@@ -6,7 +6,7 @@ use uuid::Uuid;
 use crate::{
 	game::{
 		AdvancedMatchInfo, BastionType, MatchCategory, MatchCompletion, MatchEloUpdate,
-		MatchOutcome, MatchRank, MatchTimelineEvent, MatchType, SeedType,
+		MatchOutcome, MatchRank, MatchSeedInfo, MatchTimelineEvent, MatchType, OverworldType,
 	},
 	types::Time,
 	user::{SupporterTier, UserProfile},
@@ -14,7 +14,7 @@ use crate::{
 
 #[test]
 fn match_info() {
-	const JSON: &str = r#"{"id":1524115,"type":2,"seed":{"id":null,"overworld":"VILLAGE","bastion":"HOUSING","variations":[]},"category":"ANY","gameMode":"default","players":[{"uuid":"79635c3dbf634a228bf44544cc7c0d27","nickname":"LaysarOwO","roleType":0,"eloRate":1146,"eloRank":992,"country":null},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","nickname":"Frigbob","roleType":0,"eloRate":1470,"eloRank":182,"country":null}],"spectators":[],"result":{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":620128},"forfeited":false,"decayed":false,"rank":{"season":1000,"allTime":null},"changes":[{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","change":19,"eloRate":1282},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","change":-19,"eloRate":1245}],"completions":[{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":620128}],"timelines":[{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":610048,"type":"projectelo.timeline.dragon_death"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":535511,"type":"end.root"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":535393,"type":"story.enter_the_end"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":494792,"type":"story.follow_ender_eye"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":454844,"type":"story.follow_ender_eye"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":419050,"type":"projectelo.timeline.blind_travel"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":358761,"type":"projectelo.timeline.blind_travel"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":354196,"type":"nether.obtain_blaze_rod"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":331692,"type":"nether.obtain_blaze_rod"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":320335,"type":"nether.find_fortress"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":311082,"type":"adventure.root"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":310966,"type":"adventure.kill_a_mob"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":310597,"type":"nether.find_fortress"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":290740,"type":"husbandry.root"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":282496,"type":"adventure.kill_a_mob"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":282404,"type":"adventure.root"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":266018,"type":"nether.loot_bastion"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":255043,"type":"story.form_obsidian"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":235241,"type":"nether.obtain_crying_obsidian"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":230341,"type":"nether.obtain_crying_obsidian"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":223692,"type":"story.form_obsidian"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":170186,"type":"nether.distract_piglin"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":162694,"type":"nether.loot_bastion"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":161055,"type":"nether.find_bastion"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":157338,"type":"nether.find_bastion"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":153691,"type":"husbandry.root"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":132943,"type":"story.enter_the_nether"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":132837,"type":"nether.root"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":120786,"type":"story.lava_bucket"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":118642,"type":"nether.root"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":118522,"type":"story.enter_the_nether"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":106937,"type":"story.lava_bucket"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":37230,"type":"story.root"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":33038,"type":"story.mine_stone"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":31439,"type":"story.root"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":29794,"type":"story.obtain_armor"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":29794,"type":"story.iron_tools"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":29684,"type":"story.smelt_iron"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":24938,"type":"story.mine_stone"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":23237,"type":"story.iron_tools"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":22337,"type":"story.obtain_armor"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":21037,"type":"story.smelt_iron"}],"season":7,"date":1735326765,"seedType":"VILLAGE","bastionType":"HOUSING","tag":null,"replayExist":false}"#;
+	const JSON: &str = r#"{"id":1524115,"type":2,"seed":{"id":null,"overworld":"VILLAGE","bastion":"HOUSING","variations":[]},"category":"ANY","gameMode":"default","players":[{"uuid":"79635c3dbf634a228bf44544cc7c0d27","nickname":"LaysarOwO","roleType":0,"eloRate":1146,"eloRank":1048,"country":null},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","nickname":"Frigbob","roleType":0,"eloRate":1470,"eloRank":211,"country":null}],"spectators":[],"result":{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":620128},"forfeited":false,"decayed":false,"rank":{"season":1000,"allTime":null},"changes":[{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","change":19,"eloRate":1282},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","change":-19,"eloRate":1245}],"completions":[{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":620128}],"timelines":[{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":610048,"type":"projectelo.timeline.dragon_death"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":535511,"type":"end.root"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":535393,"type":"story.enter_the_end"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":494792,"type":"story.follow_ender_eye"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":454844,"type":"story.follow_ender_eye"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":419050,"type":"projectelo.timeline.blind_travel"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":358761,"type":"projectelo.timeline.blind_travel"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":354196,"type":"nether.obtain_blaze_rod"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":331692,"type":"nether.obtain_blaze_rod"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":320335,"type":"nether.find_fortress"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":311082,"type":"adventure.root"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":310966,"type":"adventure.kill_a_mob"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":310597,"type":"nether.find_fortress"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":290740,"type":"husbandry.root"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":282496,"type":"adventure.kill_a_mob"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":282404,"type":"adventure.root"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":266018,"type":"nether.loot_bastion"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":255043,"type":"story.form_obsidian"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":235241,"type":"nether.obtain_crying_obsidian"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":230341,"type":"nether.obtain_crying_obsidian"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":223692,"type":"story.form_obsidian"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":170186,"type":"nether.distract_piglin"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":162694,"type":"nether.loot_bastion"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":161055,"type":"nether.find_bastion"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":157338,"type":"nether.find_bastion"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":153691,"type":"husbandry.root"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":132943,"type":"story.enter_the_nether"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":132837,"type":"nether.root"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":120786,"type":"story.lava_bucket"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":118642,"type":"nether.root"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":118522,"type":"story.enter_the_nether"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":106937,"type":"story.lava_bucket"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":37230,"type":"story.root"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":33038,"type":"story.mine_stone"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":31439,"type":"story.root"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":29794,"type":"story.obtain_armor"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":29794,"type":"story.iron_tools"},{"uuid":"79635c3dbf634a228bf44544cc7c0d27","time":29684,"type":"story.smelt_iron"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":24938,"type":"story.mine_stone"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":23237,"type":"story.iron_tools"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":22337,"type":"story.obtain_armor"},{"uuid":"7d3a6bb9f62645ae80cf40840ca84c50","time":21037,"type":"story.smelt_iron"}],"season":7,"date":1735326765,"seedType":"VILLAGE","bastionType":"HOUSING","tag":null,"replayExist":false}"#;
 
 	let full_info: AdvancedMatchInfo = serde_json::from_str(JSON).unwrap();
 	let info = &full_info.info;
@@ -33,7 +33,7 @@ fn match_info() {
 				"LaysarOwO",
 				SupporterTier::None,
 				Some(1146),
-				Some(992),
+				Some(1048),
 				None,
 			),
 			UserProfile::new(
@@ -41,12 +41,21 @@ fn match_info() {
 				"Frigbob",
 				SupporterTier::None,
 				Some(1470),
-				Some(182),
+				Some(211),
 				None,
 			),
 		]
 	);
 	assert_eq!(info.spectators(), []);
+	assert_eq!(
+		info.seed,
+		MatchSeedInfo {
+			id: None,
+			overworld: Some(OverworldType::Village),
+			bastion: Some(BastionType::Housing),
+			variations: [].into(),
+		}
+	);
 	assert_eq!(
 		info.result,
 		MatchOutcome {
@@ -78,8 +87,6 @@ fn match_info() {
 			}
 		],
 	);
-	assert_eq!(info.seed_type, SeedType::Village);
-	assert_eq!(info.bastion_type, BastionType::Housing);
 	assert_eq!(
 		full_info.completions(),
 		[MatchCompletion {
@@ -428,28 +435,28 @@ fn match_type() {
 }
 
 #[test]
-fn seed_type() {
+fn overworld_type() {
 	assert_eq!(
-		serde_json::from_str::<SeedType>(r#""VILLAGE""#).unwrap(),
-		SeedType::Village
+		serde_json::from_str::<OverworldType>(r#""VILLAGE""#).unwrap(),
+		OverworldType::Village
 	);
 	assert_eq!(
-		serde_json::from_str::<SeedType>(r#""BURIED_TREASURE""#).unwrap(),
-		SeedType::BuriedTreasure
+		serde_json::from_str::<OverworldType>(r#""BURIED_TREASURE""#).unwrap(),
+		OverworldType::BuriedTreasure
 	);
 	assert_eq!(
-		serde_json::from_str::<SeedType>(r#""SHIPWRECK""#).unwrap(),
-		SeedType::Shipwreck
+		serde_json::from_str::<OverworldType>(r#""SHIPWRECK""#).unwrap(),
+		OverworldType::Shipwreck
 	);
 	assert_eq!(
-		serde_json::from_str::<SeedType>(r#""DESERT_TEMPLE""#).unwrap(),
-		SeedType::DesertTemple
+		serde_json::from_str::<OverworldType>(r#""DESERT_TEMPLE""#).unwrap(),
+		OverworldType::DesertTemple
 	);
 	assert_eq!(
-		serde_json::from_str::<SeedType>(r#""RUINED_PORTAL""#).unwrap(),
-		SeedType::RuinedPortal
+		serde_json::from_str::<OverworldType>(r#""RUINED_PORTAL""#).unwrap(),
+		OverworldType::RuinedPortal
 	);
-	assert!(serde_json::from_str::<SeedType>(r#""DOESN'T EXIST""#).is_err());
+	assert!(serde_json::from_str::<OverworldType>(r#""DOESN'T EXIST""#).is_err());
 }
 
 #[test]

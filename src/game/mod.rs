@@ -43,6 +43,32 @@ pub enum MatchCategory {
 	MineAChunk,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+pub struct MatchSeedInfo {
+	id: Option<Box<str>>,
+	overworld: Option<OverworldType>,
+	bastion: Option<BastionType>,
+	variations: Box<[Box<str>]>,
+}
+impl MatchSeedInfo {
+	/// Id of the seed (not the seed itself)
+	pub fn id(&self) -> Option<&str> {
+		self.id.as_ref().map(AsRef::as_ref)
+	}
+	/// Overworld type of the seed
+	pub fn overworld(&self) -> Option<OverworldType> {
+		self.overworld
+	}
+	/// Bastion type of the seed
+	pub fn bastion(&self) -> Option<BastionType> {
+		self.bastion
+	}
+	/// Variations of the seed
+	pub fn variations(&self) -> &[Box<str>] {
+		&self.variations
+	}
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize_repr, Serialize_repr)]
 #[repr(u8)]
 pub enum MatchType {
@@ -114,7 +140,7 @@ impl MatchEloUpdate {
 /// Seed type (overworld)
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
-pub enum SeedType {
+pub enum OverworldType {
 	Village,
 	BuriedTreasure,
 	Shipwreck,
@@ -186,13 +212,12 @@ pub struct MatchInfo {
 	date: DateTime<Utc>,
 	players: Box<[UserProfile]>,
 	spectators: Box<[UserProfile]>,
+	seed: MatchSeedInfo,
 	result: MatchOutcome,
 	forfeited: bool,
 	decayed: bool,
 	rank: MatchRank,
 	changes: Box<[MatchEloUpdate]>,
-	seed_type: SeedType,
-	bastion_type: BastionType,
 }
 impl MatchInfo {
 	/// Id of the match
@@ -223,6 +248,10 @@ impl MatchInfo {
 	pub fn spectators(&self) -> &[UserProfile] {
 		&self.spectators
 	}
+	/// Seed info
+	pub fn seed_info(&self) -> &MatchSeedInfo {
+		&self.seed
+	}
 	/// The outcome of the match
 	pub fn result(&self) -> &MatchOutcome {
 		&self.result
@@ -242,14 +271,6 @@ impl MatchInfo {
 	/// The updates to the participants' ELOs
 	pub fn elo_updates(&self) -> &[MatchEloUpdate] {
 		&self.changes
-	}
-	/// The overworld seed type
-	pub fn seed_type(&self) -> SeedType {
-		self.seed_type
-	}
-	/// The bastion type
-	pub fn bastion_type(&self) -> BastionType {
-		self.bastion_type
 	}
 }
 
