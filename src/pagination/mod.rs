@@ -16,11 +16,11 @@ pub enum PaginationError {
 
 impl Display for PaginationError {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		use PaginationError::*;
+		use PaginationError as Err;
 
 		match self {
-			Page(p) => write!(f, "Page number {p} is not within bounds [0; 99]"),
-			Count(c) => write!(f, "Item count {c} is not within bounds [1; 50]"),
+			Err::Page(p) => write!(f, "Page number {p} is not within bounds [0; 99]"),
+			Err::Count(c) => write!(f, "Item count {c} is not within bounds [1; 50]"),
 		}
 	}
 }

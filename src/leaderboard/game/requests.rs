@@ -35,13 +35,13 @@ impl Serialize for BestTimeSeason {
 	where
 		S: serde::Serializer,
 	{
-		use BestTimeSeason::*;
+		use BestTimeSeason as BTS;
 
 		serde::Serialize::serialize(
 			&match self {
-				All => None,
-				Current => Some(0),
-				Specific(season) => Some(season.get()),
+				BTS::All => None,
+				BTS::Current => Some(0),
+				BTS::Specific(season) => Some(season.get()),
 			},
 			serializer,
 		)
@@ -49,20 +49,20 @@ impl Serialize for BestTimeSeason {
 }
 impl From<Season> for BestTimeSeason {
 	fn from(value: Season) -> Self {
-		use BestTimeSeason::*;
+		use BestTimeSeason as BTS;
 
 		match NonZero::new(value) {
-			None => Current,
-			Some(v) => Specific(v),
+			None => BTS::Current,
+			Some(v) => BTS::Specific(v),
 		}
 	}
 }
 impl From<Option<Season>> for BestTimeSeason {
 	fn from(value: Option<Season>) -> Self {
-		use BestTimeSeason::*;
+		use BestTimeSeason as BTS;
 
 		match value {
-			None => All,
+			None => BTS::All,
 			Some(season) => Self::from(season),
 		}
 	}

@@ -62,11 +62,9 @@ pub enum Error {
 
 impl PartialEq for Error {
 	fn eq(&self, other: &Self) -> bool {
-		use Error::*;
-
 		match (self, other) {
-			(Api(lhs), Api(rhs)) => lhs == rhs,
-			(Reqwest(lhs), Reqwest(rhs)) => lhs.to_string() == rhs.to_string(),
+			(Error::Api(lhs), Error::Api(rhs)) => lhs == rhs,
+			(Error::Reqwest(lhs), Error::Reqwest(rhs)) => lhs.to_string() == rhs.to_string(),
 			_ => false,
 		}
 	}
@@ -81,12 +79,10 @@ impl From<reqwest::Error> for Error {
 
 impl Display for Error {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		use Error::*;
-
 		match self {
-			Api(Some(api_err)) => write!(f, "API Error: {}", api_err),
-			Api(None) => f.write_str("API Error! (No message)"),
-			Reqwest(req_err) => write!(f, "Reqwest Error: {}", req_err),
+			Error::Api(Some(api_err)) => write!(f, "API Error: {}", api_err),
+			Error::Api(None) => f.write_str("API Error! (No message)"),
+			Error::Reqwest(req_err) => write!(f, "Reqwest Error: {}", req_err),
 		}
 	}
 }

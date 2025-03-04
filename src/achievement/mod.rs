@@ -125,8 +125,7 @@ impl<'de> Deserialize<'de> for Achievement {
 			where
 				V: MapAccess<'de>,
 			{
-				use AchievementData::*;
-				use Field::*;
+				use AchievementData as AD;
 
 				let mut id: Option<Box<str>> = None;
 				let mut date: Option<DateTime<Utc>> = None;
@@ -136,31 +135,31 @@ impl<'de> Deserialize<'de> for Achievement {
 
 				while let Some(key) = map.next_key()? {
 					match key {
-						Id => {
+						Field::Id => {
 							if id.is_some() {
 								return Err(de::Error::duplicate_field("id"));
 							}
 							id = Some(map.next_value()?);
 						}
-						Date => {
+						Field::Date => {
 							if date.is_some() {
 								return Err(de::Error::duplicate_field("date"));
 							}
 							date = Some(map.next_unix_timestamp()?);
 						}
-						Data => {
+						Field::Data => {
 							if data.is_some() {
 								return Err(de::Error::duplicate_field("data"));
 							}
 							data = Some(map.next_value()?);
 						}
-						Level => {
+						Field::Level => {
 							if level.is_some() {
 								return Err(de::Error::duplicate_field("level"));
 							}
 							level = Some(map.next_value()?);
 						}
-						Goal => {
+						Field::Goal => {
 							if goal.is_some() {
 								return Err(de::Error::duplicate_field("goal"));
 							}
@@ -175,11 +174,11 @@ impl<'de> Deserialize<'de> for Achievement {
 				let level = level.ok_or_else(|| de::Error::missing_field("level"))?;
 
 				let achievment_data = match id.as_ref() {
-					"bestTime" => BestTime,
-					"highestWinStreak" => HighestWinStreak,
-					"playedMatches" => PlayedMatches,
-					"playtime" => Playtime,
-					"wins" => Wins,
+					"bestTime" => AD::BestTime,
+					"highestWinStreak" => AD::HighestWinStreak,
+					"playedMatches" => AD::PlayedMatches,
+					"playtime" => AD::Playtime,
+					"wins" => AD::Wins,
 					"seasonResult" => match data.as_ref() {
 						[season_str, rank_str] => match (season_str.parse(), rank_str.parse()) {
 							(Ok(season), Ok(rank)) => {
@@ -204,7 +203,7 @@ impl<'de> Deserialize<'de> for Achievement {
 					},
 					"playoffsResult" => match data.as_ref() {
 						[season_str] => match season_str.parse() {
-							Ok(season) => PlayoffsOutcome { season },
+							Ok(season) => AD::PlayoffsOutcome { season },
 							Err(_) => {
 								return Err(de::Error::invalid_type(
 									de::Unexpected::Str(season_str),
@@ -216,18 +215,18 @@ impl<'de> Deserialize<'de> for Achievement {
 							return Err(de::Error::invalid_length(other_data.len(), &"1"))
 						}
 					},
-					"summonWither" => SummonWither,
-					"ironPickless" => IronPickless,
-					"oneshot" => Oneshot,
-					"overtake" => Overtake,
-					"foodless" => Foodless,
-					"classicRun" => ClassicRun,
-					"netherite" => Netherite,
-					"armorless" => Armorless,
-					"highLevel" => HighLevel,
-					"egapHolder" => EgapHolder,
-					"ironHoe" => IronHoe,
-					other_id => Secret {
+					"summonWither" => AD::SummonWither,
+					"ironPickless" => AD::IronPickless,
+					"oneshot" => AD::Oneshot,
+					"overtake" => AD::Overtake,
+					"foodless" => AD::Foodless,
+					"classicRun" => AD::ClassicRun,
+					"netherite" => AD::Netherite,
+					"armorless" => AD::Armorless,
+					"highLevel" => AD::HighLevel,
+					"egapHolder" => AD::EgapHolder,
+					"ironHoe" => AD::IronHoe,
+					other_id => AD::Secret {
 						id: other_id.into(),
 						data,
 					},
