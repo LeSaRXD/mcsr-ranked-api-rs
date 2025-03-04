@@ -14,10 +14,7 @@ mod time {
 }
 
 mod api_result {
-	use std::str::FromStr;
-
 	use serde::Deserialize;
-	use uuid::Uuid;
 
 	use crate::{types::DeResult, user::SupporterTier};
 
@@ -62,7 +59,7 @@ mod api_result {
 		assert_eq!(
 			result,
 			DeResult::Success(UserProfile::new(
-				Uuid::from_str("7665f76f431b41c6b321bea16aff913b").unwrap(),
+				"7665f76f431b41c6b321bea16aff913b",
 				"lowk3y_",
 				SupporterTier::None,
 				Some(1966),

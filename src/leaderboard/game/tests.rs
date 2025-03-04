@@ -1,7 +1,4 @@
-use std::str::FromStr;
-
 use chrono::{TimeZone, Utc};
-use uuid::Uuid;
 
 use crate::{
 	leaderboard::game::{BestTimeInfo, BestTimeLeaderboard},
@@ -23,7 +20,7 @@ fn leaderboard() {
 			id: 284288,
 			time: Time(433388),
 			user: UserProfile::new(
-				Uuid::from_str("08476f5847fc4daeba74a2544fc9d65b").unwrap(),
+				"08476f5847fc4daeba74a2544fc9d65b",
 				"Zylenox",
 				SupporterTier::None,
 				Some(1523),
@@ -41,7 +38,7 @@ fn leaderboard() {
 			id: 300983,
 			time: Time(457763),
 			user: UserProfile::new(
-				Uuid::from_str("17e787d1d6374f818b294f2319db370d").unwrap(),
+				"17e787d1d6374f818b294f2319db370d",
 				"silverrruns",
 				SupporterTier::None,
 				Some(1818),

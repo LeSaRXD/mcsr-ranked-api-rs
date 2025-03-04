@@ -29,7 +29,7 @@ fn match_info() {
 		players,
 		[
 			UserProfile::new(
-				Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				"79635c3dbf634a228bf44544cc7c0d27",
 				"LaysarOwO",
 				SupporterTier::None,
 				Some(1146),
@@ -37,7 +37,7 @@ fn match_info() {
 				None,
 			),
 			UserProfile::new(
-				Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				"7d3a6bb9f62645ae80cf40840ca84c50",
 				"Frigbob",
 				SupporterTier::None,
 				Some(1470),

@@ -1,7 +1,4 @@
-use std::str::FromStr;
-
 use chrono::{TimeZone, Utc};
-use uuid::Uuid;
 
 use super::{EloLeaderboardInfo, SeasonInfo};
 use crate::{
@@ -24,7 +21,7 @@ fn leaderboard() {
 	assert_eq!(
 		leaderboard.users[0].profile,
 		UserProfile::new(
-			Uuid::from_str("3c8757790ab0400b8b9e3936e0dd535b").unwrap(),
+			"3c8757790ab0400b8b9e3936e0dd535b",
 			"doogile",
 			SupporterTier::Diamond,
 			Some(2175),

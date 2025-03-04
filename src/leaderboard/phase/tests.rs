@@ -1,7 +1,4 @@
-use std::str::FromStr;
-
 use chrono::{TimeZone, Utc};
-use uuid::Uuid;
 
 use crate::{
 	leaderboard::{
@@ -28,7 +25,7 @@ fn leaderboard() {
 		leaderboard.users[0],
 		LeaderboardUser {
 			profile: UserProfile::new(
-				Uuid::from_str("7665f76f431b41c6b321bea16aff913b").unwrap(),
+				"7665f76f431b41c6b321bea16aff913b",
 				"lowk3y_",
 				SupporterTier::None,
 				Some(1966),

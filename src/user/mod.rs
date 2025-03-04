@@ -1,3 +1,5 @@
+use std::fmt::Debug;
+
 use serde::Deserialize;
 use serde_repr::Deserialize_repr;
 use uuid::Uuid;
@@ -36,16 +38,20 @@ pub struct UserProfile {
 
 #[cfg(test)]
 impl UserProfile {
-	pub(crate) fn new(
-		uuid: Uuid,
+	pub(crate) fn new<U>(
+		uuid: U,
 		name: &str,
 		supporter_tier: SupporterTier,
 		elo: Option<Elo>,
 		rank: Option<Rank>,
 		country: Option<&str>,
-	) -> Self {
+	) -> Self
+	where
+		U: TryInto<Uuid>,
+		U::Error: Debug,
+	{
 		Self {
-			uuid,
+			uuid: uuid.try_into().expect("Expected a valid uuid"),
 			nickname: name.into(),
 			supporter_tier,
 			elo,

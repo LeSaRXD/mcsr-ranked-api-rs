@@ -12,7 +12,7 @@ fn versus() {
 	assert_eq!(
 		versus.players.0,
 		UserProfile::new(
-			Uuid::from_str("a0c06d33c69941d09b22e0c98c4233fd").unwrap(),
+			"a0c06d33c69941d09b22e0c98c4233fd",
 			"jamyreaf",
 			SupporterTier::None,
 			Some(1637),
@@ -23,7 +23,7 @@ fn versus() {
 	assert_eq!(
 		versus.players.1,
 		UserProfile::new(
-			Uuid::from_str("af22aaab9ee74596a3578bd6345d25b5").unwrap(),
+			"af22aaab9ee74596a3578bd6345d25b5",
 			"Priffin",
 			SupporterTier::None,
 			Some(1637),

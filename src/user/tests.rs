@@ -1,5 +1,3 @@
-use std::str::FromStr;
-
 use uuid::Uuid;
 
 use crate::user::{
@@ -19,7 +17,7 @@ fn user_profile() {
 	assert_eq!(
 		doogile,
 		UserProfile::new(
-			Uuid::from_str("3c8757790ab0400b8b9e3936e0dd535b").unwrap(),
+			"3c8757790ab0400b8b9e3936e0dd535b",
 			"doogile",
 			SupporterTier::Diamond,
 			Some(1804),
@@ -30,7 +28,7 @@ fn user_profile() {
 	assert_eq!(
 		laysar,
 		UserProfile::new(
-			Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+			"79635c3dbf634a228bf44544cc7c0d27",
 			"LaysarOwO",
 			SupporterTier::None,
 			Some(1226),
@@ -48,7 +46,7 @@ fn all_seasons_info() {
 	assert_eq!(
 		info.profile(),
 		&UserProfile::new(
-			Uuid::from_str("9a8e24df4c8549d696a6951da84fa5c4").unwrap(),
+			"9a8e24df4c8549d696a6951da84fa5c4",
 			"Feinberg",
 			SupporterTier::Diamond,
 			Some(2047),

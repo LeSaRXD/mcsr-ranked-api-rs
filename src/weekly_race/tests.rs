@@ -1,7 +1,4 @@
-use std::str::FromStr;
-
 use chrono::{TimeZone, Utc};
-use uuid::Uuid;
 
 use crate::{
 	types::Time,
@@ -33,7 +30,7 @@ fn weekly_race() {
 			WeeklyRaceLeaderboardRecord {
 				rank: 1,
 				player: UserProfile::new(
-					Uuid::from_str("4aed1e5e8f5c44e2bc0666e0c03781af").unwrap(),
+					"4aed1e5e8f5c44e2bc0666e0c03781af",
 					"nEmerald",
 					SupporterTier::None,
 					Some(1512),
@@ -46,7 +43,7 @@ fn weekly_race() {
 			WeeklyRaceLeaderboardRecord {
 				rank: 2,
 				player: UserProfile::new(
-					Uuid::from_str("92b63a39b36a445fa94c77ae212dcea3").unwrap(),
+					"92b63a39b36a445fa94c77ae212dcea3",
 					"bing_pigs",
 					SupporterTier::None,
 					Some(1512),
@@ -59,7 +56,7 @@ fn weekly_race() {
 			WeeklyRaceLeaderboardRecord {
 				rank: 3,
 				player: UserProfile::new(
-					Uuid::from_str("5cd115f0ec1240659db152406c0984a3").unwrap(),
+					"5cd115f0ec1240659db152406c0984a3",
 					"yjako",
 					SupporterTier::None,
 					Some(1512),
