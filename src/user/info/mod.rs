@@ -1,3 +1,5 @@
+pub mod all_seasons;
+
 use chrono::serde::ts_seconds;
 use chrono::{DateTime, Utc};
 use serde::Deserialize;
@@ -198,6 +200,19 @@ pub struct PhaseInfo {
 	#[serde(flatten)]
 	info: EloPointsInfo,
 }
+#[cfg(test)]
+impl PhaseInfo {
+	pub(crate) fn new(phase: Phase, elo: Elo, rank: Rank, points: PhasePoints) -> Self {
+		Self {
+			phase,
+			info: EloPointsInfo {
+				elo: Some(elo),
+				rank: Some(rank),
+				points,
+			},
+		}
+	}
+}
 
 /// Season result
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
@@ -208,6 +223,29 @@ pub struct UserSeasonOutcome {
 	lowest: Option<Elo>,
 	phases: Box<[PhaseInfo]>,
 }
+#[cfg(test)]
+impl UserSeasonOutcome {
+	pub(crate) fn new(
+		last_elo: Elo,
+		last_rank: Rank,
+		last_points: PhasePoints,
+		highest_elo: Elo,
+		lowest_elo: Elo,
+		phases: impl IntoIterator<Item = PhaseInfo>,
+	) -> Self {
+		Self {
+			last: EloPointsInfo {
+				elo: Some(last_elo),
+				rank: Some(last_rank),
+				points: last_points,
+			},
+			highest: Some(highest_elo),
+			lowest: Some(lowest_elo),
+			phases: phases.into_iter().collect(),
+		}
+	}
+}
+
 impl UserSeasonOutcome {
 	/// Last season's ELO info
 	pub fn last(&self) -> &EloPointsInfo {

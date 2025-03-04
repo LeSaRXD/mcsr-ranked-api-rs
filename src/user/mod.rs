@@ -34,8 +34,8 @@ pub struct UserProfile {
 	country: Option<Box<str>>,
 }
 
+#[cfg(test)]
 impl UserProfile {
-	#[cfg(test)]
 	pub(crate) fn new(
 		uuid: Uuid,
 		name: &str,
@@ -53,6 +53,9 @@ impl UserProfile {
 			country: country.map(Into::into),
 		}
 	}
+}
+
+impl UserProfile {
 	/// The user's minecraft UUID
 	pub fn uuid(&self) -> Uuid {
 		self.uuid
