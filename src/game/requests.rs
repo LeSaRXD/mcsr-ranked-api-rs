@@ -90,7 +90,7 @@ const RECENT_URL: &str = "https://api.mcsrranked.com/matches/";
 #[serde(rename_all = "lowercase")]
 pub struct GetRecentMatchesParams<'a> {
 	#[serde(flatten)]
-	pub pagination: Option<Pagination>,
+	pub pagination: Pagination,
 	#[serde(rename = "type")]
 	pub kind: Option<MatchType>,
 	pub tag: Option<&'a str>,
@@ -100,9 +100,9 @@ pub struct GetRecentMatchesParams<'a> {
 	pub include_decay: bool,
 }
 impl From<Pagination> for GetRecentMatchesParams<'_> {
-	fn from(value: Pagination) -> Self {
+	fn from(pagination: Pagination) -> Self {
 		Self {
-			pagination: Some(value),
+			pagination,
 			..Default::default()
 		}
 	}
@@ -112,7 +112,7 @@ impl<'a> GetRecentMatchesParams<'a> {
 	///
 	/// Note: it is better to use `From<Pagination>`
 	pub fn pagination(mut self, pagination: Pagination) -> Self {
-		self.pagination = Some(pagination);
+		self.pagination = pagination;
 		self
 	}
 	/// Set the `kind` field

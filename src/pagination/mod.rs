@@ -1,105 +1,97 @@
-use std::{error::Error, fmt::Display, num::NonZeroU8};
+use std::num::NonZeroU8;
 
 use serde::Serialize;
+
+use crate::types::MatchId;
+
+const MAX_COUNT: u8 = 50;
 
 #[cfg(test)]
 mod tests;
 
-/// Pagination error type
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum PaginationError {
-	/// Incorrect page count
-	Page(u8),
-	/// Incorrect entry count
-	Count(u8),
-}
-
-impl Display for PaginationError {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		use PaginationError as Err;
-
-		match self {
-			Err::Page(p) => write!(f, "Page number {p} is not within bounds [0; 99]"),
-			Err::Count(c) => write!(f, "Item count {c} is not within bounds [1; 50]"),
-		}
-	}
-}
-impl Error for PaginationError {}
-
-/// Pagination struct for GET requests
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
-#[serde(rename_all = "camelCase")]
 pub struct Pagination {
-	/// Page number, 0-indexed
-	///
-	/// Default is 0
-	page: u8,
-	/// Item count
-	///
-	/// Default is 10
 	count: NonZeroU8,
+	#[serde(flatten)]
+	#[serde(skip_serializing_if = "Option::is_none")]
+	position: Option<RelativePos>,
 }
 
 impl Default for Pagination {
 	fn default() -> Self {
 		Self {
-			page: 0,
-			count: const { NonZeroU8::new(10).unwrap() },
+			count: const { NonZeroU8::new(20).unwrap() },
+			position: None,
 		}
 	}
 }
 
 impl Pagination {
-	/// Try to create a new pagination with `page` number and item `count`
-	///
-	/// # Limitations
-	/// The `page` must be within the range \[0; 99\] inclusive
-	///
-	/// The `count` must be within the range \[1; 50\] inclusive
-	pub fn new(page: u8, count: u8) -> Result<Self, PaginationError> {
-		let opt_count = NonZeroU8::new(count);
-		match (page, opt_count.map(|c| (c, c.get()))) {
-			(0..=99, Some((count, 1..=50))) => Ok(Self { page, count }),
-			(0..=99, _) => Err(PaginationError::Count(count)),
-			(_, _) => Err(PaginationError::Page(page)),
-		}
-	}
-
-	/// Try to crerate a new pagination with just the `page` number
-	pub fn page(page: u8) -> Result<Self, PaginationError> {
-		match page {
-			0..=99 => Ok(Self {
-				page,
-				..Default::default()
-			}),
-			_ => Err(PaginationError::Page(page)),
-		}
-	}
-
-	/// Try to crerate a new pagination with just the item `count`
-	pub fn count(count: u8) -> Result<Self, PaginationError> {
-		let opt_count = NonZeroU8::new(count);
-		match opt_count.map(|c| (c, c.get())) {
-			Some((count, 1..=50)) => Ok(Self {
+	/// Attempt to construct a pagination given a `count` and `position`
+	pub fn new(count: u8, position: RelativePos) -> Option<Self> {
+		NonZeroU8::new(count)
+			.filter(|_| count <= MAX_COUNT)
+			.map(|count| Self {
 				count,
-				..Default::default()
-			}),
-			_ => Err(PaginationError::Count(count)),
-		}
+				position: Some(position),
+			})
 	}
 
-	/// Create a new pagination, not checking for bounds
+	/// Create a new pagination given a `count` and `position`
+	/// without checking for `count` bounds
 	///
 	/// # Safety
-	/// The `page` must be within the range \[0; 99\] inclusive
-	///
-	/// The `count` must be within the range \[1; 50\] inclusive
-	///
-	/// Breaking these bounds will result in a
-	pub unsafe fn new_unchecked(page: u8, count: u8) -> Self {
+	/// this function calls `NonZeroU8::new_unchecked`. Passing a value outside the [1; 50] range for `count`
+	/// will result in undefined behavior
+	pub unsafe fn new_unchecked(count: u8, position: RelativePos) -> Self {
 		Self {
-			page,
 			count: unsafe { NonZeroU8::new_unchecked(count) },
+			position: Some(position),
 		}
 	}
+
+	/// Attempt to construct a pagination given a `count` without relative position
+	pub fn count(count: u8) -> Option<Self> {
+		NonZeroU8::new(count).map(|count| Self {
+			count,
+			position: None,
+		})
+	}
+
+	/// Create a new pagination given a `count` without a relative position
+	/// without checking for `count` bounds
+	///
+	/// # Safety
+	/// this function calls `NonZeroU8::new_unchecked`. Passing a value outside the [1; 50] range for `count`
+	/// will result in undefined behavior
+	pub unsafe fn count_unchecked(count: u8) -> Self {
+		Self {
+			count: unsafe { NonZeroU8::new_unchecked(count) },
+			position: None,
+		}
+	}
+}
+
+impl From<RelativePos> for Pagination {
+	fn from(position: RelativePos) -> Self {
+		Self {
+			position: Some(position),
+			..Default::default()
+		}
+	}
+}
+impl From<Option<RelativePos>> for Pagination {
+	fn from(position: Option<RelativePos>) -> Self {
+		Self {
+			position,
+			..Default::default()
+		}
+	}
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "lowercase")]
+pub enum RelativePos {
+	Before(MatchId),
+	After(MatchId),
 }

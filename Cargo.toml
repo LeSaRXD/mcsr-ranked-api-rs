@@ -1,9 +1,8 @@
 [package]
 name = "mcsr-ranked-api"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 description = "MCSR Ranked API wrapper in Rust"
-license = "MIT"
 license-file = "LICENSE.txt"
 repository = "https://github.com/LeSaRXD/mcsr-ranked-api-rs"
 readme = "README.md"
@@ -22,10 +21,10 @@ blocking = []
 all = ["achievements", "matches", "weekly_races", "blocking", "leaderboards"]
 
 [dependencies]
-chrono = { version = "0.4.40", features = ["serde"] }
+chrono = { version = "0.4.41", features = ["serde"] }
 reqwest = { version = "0.12.15", features = ["json", "blocking"] }
 serde = { version = "1.0.219", features = ["derive"] }
 serde_json = "1.0.140"
-serde_qs = "0.14.0"
+serde_qs = "0.15.0"
 serde_repr = "0.1.20"
 uuid = { version = "1.16.0", features = ["serde"] }

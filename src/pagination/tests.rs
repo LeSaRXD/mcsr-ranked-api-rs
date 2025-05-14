@@ -1,35 +1,29 @@
-use std::num::NonZeroU8;
-
-use super::{Pagination, PaginationError};
+use super::*;
 
 #[test]
-fn new_ok() {
-	assert_eq!(
-		Pagination::new(32, 5).unwrap(),
-		Pagination {
-			page: 32,
-			count: const { NonZeroU8::new(5).unwrap() }
-		}
-	);
+fn before() {
+	let before = RelativePos::Before(999);
+	let before_str = serde_qs::to_string(&before).unwrap();
+	assert_eq!(before_str, "before=999");
+
+	let pagination = Pagination {
+		count: NonZeroU8::new(10).unwrap(),
+		position: Some(before),
+	};
+	let pagination_str = serde_qs::to_string(&pagination).unwrap();
+	assert_eq!(pagination_str, "count=10&before=999");
 }
 
 #[test]
-fn new_page_error() {
-	assert_eq!(
-		Pagination::new(100, 20).unwrap_err(),
-		PaginationError::Page(100)
-	);
-}
+fn after() {
+	let after = RelativePos::After(1999);
+	let after_str = serde_qs::to_string(&after).unwrap();
+	assert_eq!(after_str, "after=1999");
 
-#[test]
-fn new_count_error() {
-	assert_eq!(
-		Pagination::new(32, 51).unwrap_err(),
-		PaginationError::Count(51)
-	);
-
-	assert_eq!(
-		Pagination::new(32, 0).unwrap_err(),
-		PaginationError::Count(0)
-	);
+	let pagination = Pagination {
+		count: NonZeroU8::new(10).unwrap(),
+		position: Some(after),
+	};
+	let pagination_str = serde_qs::to_string(&pagination).unwrap();
+	assert_eq!(pagination_str, "count=10&after=1999");
 }
