@@ -8,21 +8,10 @@ use crate::types::{Rank, Time};
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct WeeklyRaceResult {
-	id: WeeklyRaceId,
-	time: Time,
-	rank: Rank,
-}
-impl WeeklyRaceResult {
 	/// WeeklyRace ID, 1-indexed
-	pub fn id(&self) -> WeeklyRaceId {
-		self.id
-	}
+	pub id: WeeklyRaceId,
 	/// Best time
-	pub fn time(&self) -> Time {
-		self.time
-	}
+	pub time: Time,
 	/// Completion rank, 1-indexed
-	pub fn rank(&self) -> Rank {
-		self.rank
-	}
+	pub rank: Rank,
 }

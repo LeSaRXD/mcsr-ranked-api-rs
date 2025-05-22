@@ -107,34 +107,24 @@ impl<T> From<DeResult<T>> for Result<T> {
 /// Container for ranked and casual values
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct RankedAndCasual<T> {
-	ranked: T,
-	casual: T,
-}
-impl<T> RankedAndCasual<T> {
-	/// Value for ranked
-	pub fn ranked(&self) -> &T {
-		&self.ranked
-	}
-	/// Value for casual
-	pub fn casual(&self) -> &T {
-		&self.casual
-	}
+	pub ranked: T,
+	pub casual: T,
 }
 
 /// Container for UUIDs and data of exactly two players
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct TwoUserData<T> {
-	user_1_uuid: Uuid,
-	user_1_data: T,
-	user_2_uuid: Uuid,
-	user_2_data: T,
+	pub user_1_uuid: Uuid,
+	pub user_1_data: T,
+	pub user_2_uuid: Uuid,
+	pub user_2_data: T,
 }
 impl<T> TwoUserData<T> {
 	/// First user's UUID and data
 	pub fn user_1(&self) -> (Uuid, &T) {
 		(self.user_1_uuid, &self.user_1_data)
 	}
-	/// Second users's UUID and data
+	/// Second user's UUID and data
 	pub fn user_2(&self) -> (Uuid, &T) {
 		(self.user_2_uuid, &self.user_2_data)
 	}

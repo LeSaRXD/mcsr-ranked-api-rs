@@ -16,43 +16,18 @@ mod tests;
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BestTimeInfo {
-	rank: Rank,
-	season: Season,
+	pub rank: Rank,
+	pub season: Season,
 	#[serde(with = "ts_seconds")]
-	date: DateTime<Utc>,
-	id: MatchId,
-	time: Time,
-	user: UserProfile,
-}
-impl BestTimeInfo {
-	/// Rank of the best time
-	pub fn rank(&self) -> Rank {
-		self.rank
-	}
-	/// Season when the best time was set
-	pub fn season(&self) -> Season {
-		self.season
-	}
-	/// Date when the best time was set
-	pub fn date(&self) -> DateTime<Utc> {
-		self.date
-	}
-	/// Match id of the best time
-	pub fn match_id(&self) -> MatchId {
-		self.id
-	}
-	/// Final time
-	pub fn time(&self) -> Time {
-		self.time
-	}
-	/// Profile of the user who set the best time
-	pub fn user(&self) -> &UserProfile {
-		&self.user
-	}
+	pub date: DateTime<Utc>,
+	pub id: MatchId,
+	pub time: Time,
+	pub user: UserProfile,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct BestTimeLeaderboard(pub Box<[BestTimeInfo]>);
+
 impl Deref for BestTimeLeaderboard {
 	type Target = [BestTimeInfo];
 	fn deref(&self) -> &Self::Target {

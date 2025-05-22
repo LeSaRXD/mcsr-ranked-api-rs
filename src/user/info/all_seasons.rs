@@ -12,15 +12,11 @@ use crate::{
 #[serde(rename_all = "camelCase")]
 pub struct AllSeasonUserInfo {
 	#[serde(flatten)]
-	profile: UserProfile,
+	pub profile: UserProfile,
 	#[serde(deserialize_with = "de_season_results")]
-	season_results: Box<[Option<UserSeasonOutcome>]>,
+	pub season_results: Box<[Option<UserSeasonOutcome>]>,
 }
 impl AllSeasonUserInfo {
-	/// The profile of the user
-	pub fn profile(&self) -> &UserProfile {
-		&self.profile
-	}
 	/// All of the seasons' results
 	pub fn season_results(&self) -> &[Option<UserSeasonOutcome>] {
 		&self.season_results

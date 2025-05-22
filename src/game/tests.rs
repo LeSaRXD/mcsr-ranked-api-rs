@@ -24,7 +24,7 @@ fn match_info() {
 	assert_eq!(info.category, Some(MatchCategory::Any));
 	assert_eq!(info.date, Utc.timestamp_opt(1735326765, 0).unwrap());
 	let mut players = info.players().to_vec();
-	players.sort_by_key(|l| l.uuid());
+	players.sort_by_key(|l| l.uuid);
 	assert_eq!(
 		players,
 		[
@@ -311,7 +311,7 @@ fn match_info() {
 			}
 		]
 	);
-	assert!(!full_info.replay_exist);
+	assert!(!full_info.replay_exists);
 }
 
 #[test]

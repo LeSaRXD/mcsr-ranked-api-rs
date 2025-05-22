@@ -11,10 +11,10 @@ mod tests;
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub struct Pagination {
-	count: NonZeroU8,
+	pub count: NonZeroU8,
 	#[serde(flatten)]
 	#[serde(skip_serializing_if = "Option::is_none")]
-	position: Option<RelativePos>,
+	pub position: Option<RelativePos>,
 }
 
 impl Default for Pagination {

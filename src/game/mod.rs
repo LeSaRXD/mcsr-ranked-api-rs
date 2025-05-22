@@ -45,27 +45,15 @@ pub enum MatchCategory {
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct MatchSeedInfo {
-	id: Option<Box<str>>,
-	overworld: Option<OverworldType>,
-	bastion: Option<BastionType>,
-	variations: Box<[Box<str>]>,
+	pub id: Option<Box<str>>,
+	pub overworld: Option<OverworldType>,
+	pub bastion: Option<BastionType>,
+	pub variations: Box<[Box<str>]>,
 }
 impl MatchSeedInfo {
 	/// Id of the seed (not the seed itself)
 	pub fn id(&self) -> Option<&str> {
 		self.id.as_ref().map(AsRef::as_ref)
-	}
-	/// Overworld type of the seed
-	pub fn overworld(&self) -> Option<OverworldType> {
-		self.overworld
-	}
-	/// Bastion type of the seed
-	pub fn bastion(&self) -> Option<BastionType> {
-		self.bastion
-	}
-	/// Variations of the seed
-	pub fn variations(&self) -> &[Box<str>] {
-		&self.variations
 	}
 }
 
@@ -82,34 +70,16 @@ pub enum MatchType {
 #[serde(rename_all = "camelCase")]
 pub struct MatchOutcome {
 	#[serde(rename = "uuid")]
-	winner_uuid: Option<Uuid>,
-	time: Time,
-}
-impl MatchOutcome {
-	pub fn winner_uuid(&self) -> Option<Uuid> {
-		self.winner_uuid
-	}
-	pub fn time(&self) -> Time {
-		self.time
-	}
+	pub winner_uuid: Option<Uuid>,
+	pub time: Time,
 }
 
 /// Match leaderboard ranking
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MatchRank {
-	season: Option<Rank>,
-	all_time: Option<Rank>,
-}
-impl MatchRank {
-	/// Seasonal ranking of the match, 1-indexed
-	pub fn season(&self) -> Option<Rank> {
-		self.season
-	}
-	/// All-time ranking of the match, 1-indexed
-	pub fn all_time(&self) -> Option<Rank> {
-		self.all_time
-	}
+	pub season: Option<Rank>,
+	pub all_time: Option<Rank>,
 }
 
 /// Match contestant's elo update
@@ -117,24 +87,10 @@ impl MatchRank {
 #[serde(rename_all = "camelCase")]
 pub struct MatchEloUpdate {
 	#[serde(rename = "uuid")]
-	player_uuid: Uuid,
-	change: Option<EloChange>,
+	pub player_uuid: Uuid,
+	pub change: Option<EloChange>,
 	#[serde(rename = "eloRate")]
-	elo: Option<Elo>,
-}
-impl MatchEloUpdate {
-	/// Player (whose ELO changed) miencraft UUID
-	pub fn player_uuid(&self) -> Uuid {
-		self.player_uuid
-	}
-	/// Elo change (delta)
-	pub fn elo_change(&self) -> Option<EloChange> {
-		self.change
-	}
-	/// Current elo
-	pub fn elo(&self) -> Option<Elo> {
-		self.elo
-	}
+	pub elo: Option<Elo>,
 }
 
 /// Seed type (overworld)
@@ -163,18 +119,8 @@ pub enum BastionType {
 #[serde(rename_all = "camelCase")]
 pub struct MatchCompletion {
 	#[serde(rename = "uuid")]
-	player_uuid: Uuid,
-	time: Time,
-}
-impl MatchCompletion {
-	/// UUID of the player who completed the match
-	pub fn player_uuid(&self) -> Uuid {
-		self.player_uuid
-	}
-	/// Completion time
-	pub fn time(&self) -> Time {
-		self.time
-	}
+	pub player_uuid: Uuid,
+	pub time: Time,
 }
 
 /// Match timeline event
@@ -182,18 +128,12 @@ impl MatchCompletion {
 #[serde(rename_all = "camelCase")]
 pub struct MatchTimelineEvent {
 	#[serde(rename = "uuid")]
-	player_uuid: Uuid,
-	time: Time,
+	pub player_uuid: Uuid,
+	pub time: Time,
 	#[serde(rename = "type")]
-	id: Box<str>,
+	pub id: Box<str>,
 }
 impl MatchTimelineEvent {
-	pub fn player_uuid(&self) -> Uuid {
-		self.player_uuid
-	}
-	pub fn time(&self) -> Time {
-		self.time
-	}
 	pub fn id(&self) -> &str {
 		&self.id
 	}
@@ -203,43 +143,24 @@ impl MatchTimelineEvent {
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MatchInfo {
-	id: MatchId,
+	pub id: MatchId,
 	#[serde(rename = "type")]
-	kind: MatchType,
-	season: Season,
-	category: Option<MatchCategory>,
+	pub kind: MatchType,
+	pub season: Season,
+	pub category: Option<MatchCategory>,
 	#[serde(with = "ts_seconds")]
-	date: DateTime<Utc>,
-	players: Box<[UserProfile]>,
-	spectators: Box<[UserProfile]>,
-	seed: Option<MatchSeedInfo>,
-	result: MatchOutcome,
-	forfeited: bool,
-	decayed: bool,
-	rank: MatchRank,
-	changes: Box<[MatchEloUpdate]>,
+	pub date: DateTime<Utc>,
+	pub players: Box<[UserProfile]>,
+	pub spectators: Box<[UserProfile]>,
+	pub seed: Option<MatchSeedInfo>,
+	pub result: MatchOutcome,
+	pub forfeited: bool,
+	pub decayed: bool,
+	pub rank: MatchRank,
+	#[serde(rename = "changes")]
+	pub elo_updates: Box<[MatchEloUpdate]>,
 }
 impl MatchInfo {
-	/// Id of the match
-	pub fn id(&self) -> MatchId {
-		self.id
-	}
-	/// Type of the match
-	pub fn kind(&self) -> MatchType {
-		self.kind
-	}
-	/// Season during which the match took place
-	pub fn season(&self) -> Season {
-		self.season
-	}
-	/// SpeedrunIGT category of the match
-	pub fn category(&self) -> Option<MatchCategory> {
-		self.category
-	}
-	/// Date and time when the match took place
-	pub fn date(&self) -> DateTime<Utc> {
-		self.date
-	}
 	/// Users participating in the match
 	pub fn players(&self) -> &[UserProfile] {
 		&self.players
@@ -248,29 +169,9 @@ impl MatchInfo {
 	pub fn spectators(&self) -> &[UserProfile] {
 		&self.spectators
 	}
-	/// Seed info
-	pub fn seed_info(&self) -> Option<&MatchSeedInfo> {
-		self.seed.as_ref()
-	}
-	/// The outcome of the match
-	pub fn result(&self) -> &MatchOutcome {
-		&self.result
-	}
-	/// Whether the match ended by forfeit or not
-	pub fn forfeited(&self) -> bool {
-		self.forfeited
-	}
-	/// Whether the match was a decay match or not
-	pub fn decayed(&self) -> bool {
-		self.decayed
-	}
-	/// The leaderboard ranking of the match
-	pub fn rank(&self) -> &MatchRank {
-		&self.rank
-	}
-	/// The updates to the participants' ELOs
+	// The updates to the participants' ELOs
 	pub fn elo_updates(&self) -> &[MatchEloUpdate] {
-		&self.changes
+		&self.elo_updates
 	}
 }
 
@@ -281,8 +182,10 @@ pub struct AdvancedMatchInfo {
 	#[serde(flatten)]
 	info: MatchInfo,
 	completions: Box<[MatchCompletion]>,
-	timelines: Box<[MatchTimelineEvent]>,
-	replay_exist: bool,
+	#[serde(rename = "timelines")]
+	timeline_events: Box<[MatchTimelineEvent]>,
+	#[serde(rename = "replayExist")]
+	replay_exists: bool,
 }
 impl AdvancedMatchInfo {
 	/// The completions info of the match
@@ -291,10 +194,6 @@ impl AdvancedMatchInfo {
 	}
 	/// The events (achievements) timeline
 	pub fn timeline_events(&self) -> &[MatchTimelineEvent] {
-		&self.timelines
-	}
-	/// Whether the replay for the match exists
-	pub fn replay_exists(&self) -> bool {
-		self.replay_exist
+		&self.timeline_events
 	}
 }

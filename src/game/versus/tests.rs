@@ -32,32 +32,32 @@ fn versus() {
 		)
 	);
 
-	assert_eq!(versus.results.ranked().total, 3);
+	assert_eq!(versus.results.ranked.total, 3);
 	assert_eq!(
-		versus.results.ranked().wins.user_1(),
+		versus.results.ranked.wins.user_1(),
 		(
 			Uuid::from_str("a0c06d33c69941d09b22e0c98c4233fd").unwrap(),
 			&2
 		),
 	);
 	assert_eq!(
-		versus.results.ranked().wins.user_2(),
+		versus.results.ranked.wins.user_2(),
 		(
 			Uuid::from_str("af22aaab9ee74596a3578bd6345d25b5").unwrap(),
 			&1
 		),
 	);
 
-	assert_eq!(versus.results.casual().total, 0);
+	assert_eq!(versus.results.casual.total, 0);
 	assert_eq!(
-		versus.results.casual().wins.user_1(),
+		versus.results.casual.wins.user_1(),
 		(
 			Uuid::from_str("a0c06d33c69941d09b22e0c98c4233fd").unwrap(),
 			&0
 		),
 	);
 	assert_eq!(
-		versus.results.casual().wins.user_2(),
+		versus.results.casual.wins.user_2(),
 		(
 			Uuid::from_str("af22aaab9ee74596a3578bd6345d25b5").unwrap(),
 			&0

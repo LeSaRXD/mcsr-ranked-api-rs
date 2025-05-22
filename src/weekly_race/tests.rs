@@ -74,7 +74,7 @@ fn weekly_race() {
 fn weekly_race_result() {
 	const JSON: &str = r#"{"id":1,"time":489237,"rank":8}"#;
 	let result = serde_json::from_str::<WeeklyRaceResult>(JSON).unwrap();
-	assert_eq!(result.id(), 1);
-	assert_eq!(result.time(), Time(489237));
-	assert_eq!(result.rank(), 8);
+	assert_eq!(result.id, 1);
+	assert_eq!(result.time, Time(489237));
+	assert_eq!(result.rank, 8);
 }

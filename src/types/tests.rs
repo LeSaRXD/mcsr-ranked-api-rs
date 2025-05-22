@@ -134,6 +134,6 @@ fn ranked_and_casual() {
 	const JSON: &str = r#"{"ranked":2,"casual":1}"#;
 	let data: RankedAndCasual<u32> = serde_json::from_str(JSON).unwrap();
 
-	assert_eq!(data.ranked(), &2);
-	assert_eq!(data.casual(), &1);
+	assert_eq!(data.ranked, 2);
+	assert_eq!(data.casual, 1);
 }

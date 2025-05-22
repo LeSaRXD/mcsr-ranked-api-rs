@@ -1,6 +1,6 @@
 pub mod all_seasons;
 
-use chrono::serde::ts_seconds;
+use chrono::serde::{ts_seconds, ts_seconds_option};
 use chrono::{DateTime, Utc};
 use serde::Deserialize;
 
@@ -16,8 +16,10 @@ use crate::weekly_race::result::WeeklyRaceResult;
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct UserAchievements {
-	display: Box<[Achievement]>,
-	total: Box<[Achievement]>,
+	/// Achievements the user chose to display on their profile
+	pub display: Box<[Achievement]>,
+	/// All of the user's achievements
+	pub total: Box<[Achievement]>,
 }
 #[cfg(feature = "achievements")]
 impl UserAchievements {
@@ -40,17 +42,8 @@ pub struct UserTimestamps {
 	last_online: DateTime<Utc>,
 	#[serde(with = "ts_seconds")]
 	last_ranked: DateTime<Utc>,
-}
-impl UserTimestamps {
-	pub fn first_online(&self) -> DateTime<Utc> {
-		self.first_online
-	}
-	pub fn last_online(&self) -> DateTime<Utc> {
-		self.last_online
-	}
-	pub fn last_ranked(&self) -> DateTime<Utc> {
-		self.last_ranked
-	}
+	#[serde(with = "ts_seconds_option")]
+	next_decay: Option<DateTime<Utc>>,
 }
 
 /// Single statistic in ranked and casual modes
@@ -60,87 +53,33 @@ pub type Stat = RankedAndCasual<Option<u64>>;
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct UserStats {
-	best_time: Stat,
-	highest_win_streak: Stat,
-	current_win_streak: Stat,
-	played_matches: Stat,
-	playtime: Stat,
-	forfeits: Stat,
-	completions: Stat,
-	wins: Stat,
+	pub best_time: Stat,
+	pub highest_win_streak: Stat,
+	pub current_win_streak: Stat,
+	pub played_matches: Stat,
+	pub playtime: Stat,
+	pub completion_time: Stat,
+	pub forfeits: Stat,
+	pub completions: Stat,
+	pub wins: Stat,
 	#[serde(rename = "loses")]
-	losses: Stat,
-}
-impl UserStats {
-	pub fn best_time(&self) -> &Stat {
-		&self.best_time
-	}
-
-	pub fn highest_win_streak(&self) -> &Stat {
-		&self.highest_win_streak
-	}
-
-	pub fn current_win_streak(&self) -> &Stat {
-		&self.current_win_streak
-	}
-
-	pub fn played_matches(&self) -> &Stat {
-		&self.played_matches
-	}
-
-	pub fn playtime(&self) -> &Stat {
-		&self.playtime
-	}
-
-	pub fn forfeits(&self) -> &Stat {
-		&self.forfeits
-	}
-
-	pub fn completions(&self) -> &Stat {
-		&self.completions
-	}
-
-	pub fn wins(&self) -> &Stat {
-		&self.wins
-	}
-
-	pub fn losses(&self) -> &Stat {
-		&self.losses
-	}
+	pub losses: Stat,
 }
 
 /// All statistics for season and total
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct UserStatistics {
-	season: UserStats,
-	total: UserStats,
-}
-impl UserStatistics {
-	pub fn season(&self) -> &UserStats {
-		&self.season
-	}
-
-	pub fn total(&self) -> &UserStats {
-		&self.total
-	}
+	pub season: UserStats,
+	pub total: UserStats,
 }
 
 /// User's social connection
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct UserConnection {
-	id: Box<str>,
-	name: Box<str>,
-}
-impl UserConnection {
-	pub fn id(&self) -> &str {
-		&self.id
-	}
-
-	pub fn name(&self) -> &str {
-		&self.name
-	}
+	pub id: Box<str>,
+	pub name: Box<str>,
 }
 
 /// All of user's connections
@@ -148,57 +87,30 @@ impl UserConnection {
 #[serde(rename_all = "camelCase")]
 pub struct UserConnections {
 	#[serde(default)]
-	discord: Option<UserConnection>,
+	pub discord: Option<UserConnection>,
 	#[serde(default)]
-	twitch: Option<UserConnection>,
+	pub twitch: Option<UserConnection>,
 	#[serde(default)]
-	youtube: Option<UserConnection>,
-}
-impl UserConnections {
-	pub fn discord(&self) -> Option<&UserConnection> {
-		self.discord.as_ref()
-	}
-
-	pub fn twitch(&self) -> Option<&UserConnection> {
-		self.twitch.as_ref()
-	}
-
-	pub fn youtube(&self) -> Option<&UserConnection> {
-		self.youtube.as_ref()
-	}
+	pub youtube: Option<UserConnection>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EloPointsInfo {
 	#[serde(rename = "eloRate")]
-	elo: Option<Elo>,
+	pub elo: Option<Elo>,
 	#[serde(rename = "eloRank")]
-	rank: Option<Rank>,
+	pub rank: Option<Rank>,
 	#[serde(alias = "phasePoint", alias = "point")]
-	points: PhasePoints,
-}
-impl EloPointsInfo {
-	/// ELO
-	pub fn elo(&self) -> Option<Elo> {
-		self.elo
-	}
-	/// Leaderboard rank
-	pub fn rank(&self) -> Option<Rank> {
-		self.rank
-	}
-	/// Phase points
-	pub fn points(&self) -> PhasePoints {
-		self.points
-	}
+	pub points: PhasePoints,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PhaseInfo {
-	phase: Phase,
+	pub phase: Phase,
 	#[serde(flatten)]
-	info: EloPointsInfo,
+	pub info: EloPointsInfo,
 }
 #[cfg(test)]
 impl PhaseInfo {
@@ -218,10 +130,10 @@ impl PhaseInfo {
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct UserSeasonOutcome {
-	last: EloPointsInfo,
-	highest: Option<Elo>,
-	lowest: Option<Elo>,
-	phases: Box<[PhaseInfo]>,
+	pub last: EloPointsInfo,
+	pub highest: Option<Elo>,
+	pub lowest: Option<Elo>,
+	pub phases: Box<[PhaseInfo]>,
 }
 #[cfg(test)]
 impl UserSeasonOutcome {
@@ -247,62 +159,29 @@ impl UserSeasonOutcome {
 }
 
 impl UserSeasonOutcome {
-	/// Last season's ELO info
-	pub fn last(&self) -> &EloPointsInfo {
-		&self.last
-	}
-	/// Highest ELO
-	pub fn highest(&self) -> Option<&Elo> {
-		self.highest.as_ref()
-	}
-	/// Lowest ELO
-	pub fn lowest(&self) -> Option<&Elo> {
-		self.lowest.as_ref()
-	}
-	/// Phase info
+	/// Every phase info
 	pub fn phases(&self) -> &[PhaseInfo] {
 		&self.phases
 	}
 }
 
-/// All of user's available data combined
+/// All of user's data combined
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct UserInfo {
 	#[serde(flatten)]
-	profile: UserProfile,
+	pub profile: UserProfile,
 	#[cfg(feature = "achievements")]
-	achievements: UserAchievements,
-	timestamp: UserTimestamps,
-	statistics: UserStatistics,
-	connections: UserConnections,
-	season_result: Option<UserSeasonOutcome>,
+	pub achievements: UserAchievements,
+	#[serde(rename = "timestamp")]
+	pub timestamps: UserTimestamps,
+	pub statistics: UserStatistics,
+	pub connections: UserConnections,
+	pub season_result: Option<UserSeasonOutcome>,
 	#[cfg(feature = "weekly_races")]
-	weekly_races: Box<[WeeklyRaceResult]>,
+	pub weekly_races: Box<[WeeklyRaceResult]>,
 }
 impl UserInfo {
-	/// User's profile
-	pub fn profile(&self) -> &UserProfile {
-		&self.profile
-	}
-	#[cfg(feature = "achievements")]
-	/// User's achievements
-	pub fn achievements(&self) -> &UserAchievements {
-		&self.achievements
-	}
-	/// User's first, last seen and last ranked timestamps
-	pub fn timestamps(&self) -> &UserTimestamps {
-		&self.timestamp
-	}
-	/// User's connections
-	pub fn connections(&self) -> &UserConnections {
-		&self.connections
-	}
-	/// User's elo and phase results
-	pub fn season_result(&self) -> Option<&UserSeasonOutcome> {
-		self.season_result.as_ref()
-	}
-	#[cfg(feature = "weekly_races")]
 	/// User's weekly race stats
 	pub fn weekly_races(&self) -> &[WeeklyRaceResult] {
 		&self.weekly_races

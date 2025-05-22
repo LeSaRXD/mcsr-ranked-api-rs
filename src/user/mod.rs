@@ -25,15 +25,15 @@ pub enum SupporterTier {
 #[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct UserProfile {
-	uuid: Uuid,
-	nickname: Box<str>,
+	pub uuid: Uuid,
+	pub nickname: Box<str>,
 	#[serde(rename = "roleType")]
-	supporter_tier: SupporterTier,
+	pub supporter_tier: SupporterTier,
 	#[serde(rename = "eloRate")]
-	elo: Option<Elo>,
+	pub elo: Option<Elo>,
 	#[serde(rename = "eloRank")]
-	rank: Option<Rank>,
-	country: Option<Box<str>>,
+	pub rank: Option<Rank>,
+	pub country: Option<Box<str>>,
 }
 
 #[cfg(test)]
@@ -58,28 +58,5 @@ impl UserProfile {
 			rank,
 			country: country.map(Into::into),
 		}
-	}
-}
-
-impl UserProfile {
-	/// The user's minecraft UUID
-	pub fn uuid(&self) -> Uuid {
-		self.uuid
-	}
-	/// The user's minecraft IGN
-	pub fn nickname(&self) -> &str {
-		&self.nickname
-	}
-	/// The user's supporter tier
-	pub fn supporter_tier(&self) -> SupporterTier {
-		self.supporter_tier
-	}
-	/// The user's ELO
-	pub fn elo(&self) -> Option<Elo> {
-		self.elo
-	}
-	/// The user's leaderboard rank, 1-indexed
-	pub fn rank(&self) -> Option<Rank> {
-		self.rank
 	}
 }

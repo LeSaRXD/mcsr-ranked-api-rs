@@ -44,8 +44,8 @@ fn all_seasons_info() {
 	let info: AllSeasonUserInfo = serde_json::from_str(JSON).unwrap();
 
 	assert_eq!(
-		info.profile(),
-		&UserProfile::new(
+		info.profile,
+		UserProfile::new(
 			"9a8e24df4c8549d696a6951da84fa5c4",
 			"Feinberg",
 			SupporterTier::Diamond,
