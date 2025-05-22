@@ -21,7 +21,7 @@ fn match_info() {
 	assert_eq!(info.id, 1524115);
 	assert_eq!(info.kind, MatchType::Ranked);
 	assert_eq!(info.season, 7);
-	assert_eq!(info.category, MatchCategory::Any);
+	assert_eq!(info.category, Some(MatchCategory::Any));
 	assert_eq!(info.date, Utc.timestamp_opt(1735326765, 0).unwrap());
 	let mut players = info.players().to_vec();
 	players.sort_by_key(|l| l.uuid());
@@ -46,20 +46,22 @@ fn match_info() {
 			),
 		]
 	);
+	let frigidbob = Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap();
+	let laysar = Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap();
 	assert_eq!(info.spectators(), []);
 	assert_eq!(
 		info.seed,
-		MatchSeedInfo {
+		Some(MatchSeedInfo {
 			id: None,
 			overworld: Some(OverworldType::Village),
 			bastion: Some(BastionType::Housing),
 			variations: [].into(),
-		}
+		})
 	);
 	assert_eq!(
 		info.result,
 		MatchOutcome {
-			winner_uuid: Some(Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap()),
+			winner_uuid: Some(frigidbob),
 			time: Time(620128),
 		}
 	);
@@ -76,12 +78,12 @@ fn match_info() {
 		info.elo_updates(),
 		[
 			MatchEloUpdate {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				change: Some(19),
 				elo: Some(1282),
 			},
 			MatchEloUpdate {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				change: Some(-19),
 				elo: Some(1245),
 			}
@@ -90,7 +92,7 @@ fn match_info() {
 	assert_eq!(
 		full_info.completions(),
 		[MatchCompletion {
-			player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+			player_uuid: frigidbob,
 			time: Time(620128),
 		}]
 	);
@@ -98,212 +100,212 @@ fn match_info() {
 		full_info.timeline_events(),
 		[
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(610048),
 				id: "projectelo.timeline.dragon_death".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(535511),
 				id: "end.root".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(535393),
 				id: "story.enter_the_end".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(494792),
 				id: "story.follow_ender_eye".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(454844),
 				id: "story.follow_ender_eye".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(419050),
 				id: "projectelo.timeline.blind_travel".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(358761),
 				id: "projectelo.timeline.blind_travel".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(354196),
 				id: "nether.obtain_blaze_rod".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(331692),
 				id: "nether.obtain_blaze_rod".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(320335),
 				id: "nether.find_fortress".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(311082),
 				id: "adventure.root".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(310966),
 				id: "adventure.kill_a_mob".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(310597),
 				id: "nether.find_fortress".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(290740),
 				id: "husbandry.root".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(282496),
 				id: "adventure.kill_a_mob".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(282404),
 				id: "adventure.root".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(266018),
 				id: "nether.loot_bastion".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(255043),
 				id: "story.form_obsidian".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(235241),
 				id: "nether.obtain_crying_obsidian".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(230341),
 				id: "nether.obtain_crying_obsidian".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(223692),
 				id: "story.form_obsidian".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(170186),
 				id: "nether.distract_piglin".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(162694),
 				id: "nether.loot_bastion".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(161055),
 				id: "nether.find_bastion".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(157338),
 				id: "nether.find_bastion".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(153691),
 				id: "husbandry.root".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(132943),
 				id: "story.enter_the_nether".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(132837),
 				id: "nether.root".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(120786),
 				id: "story.lava_bucket".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(118642),
 				id: "nether.root".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(118522),
 				id: "story.enter_the_nether".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(106937),
 				id: "story.lava_bucket".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(37230),
 				id: "story.root".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(33038),
 				id: "story.mine_stone".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(31439),
 				id: "story.root".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(29794),
 				id: "story.obtain_armor".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(29794),
 				id: "story.iron_tools".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap(),
+				player_uuid: laysar,
 				time: Time(29684),
 				id: "story.smelt_iron".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(24938),
 				id: "story.mine_stone".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(23237),
 				id: "story.iron_tools".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(22337),
 				id: "story.obtain_armor".into(),
 			},
 			MatchTimelineEvent {
-				player_uuid: Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap(),
+				player_uuid: frigidbob,
 				time: Time(21037),
 				id: "story.smelt_iron".into(),
 			}

@@ -207,12 +207,12 @@ pub struct MatchInfo {
 	#[serde(rename = "type")]
 	kind: MatchType,
 	season: Season,
-	category: MatchCategory,
+	category: Option<MatchCategory>,
 	#[serde(with = "ts_seconds")]
 	date: DateTime<Utc>,
 	players: Box<[UserProfile]>,
 	spectators: Box<[UserProfile]>,
-	seed: MatchSeedInfo,
+	seed: Option<MatchSeedInfo>,
 	result: MatchOutcome,
 	forfeited: bool,
 	decayed: bool,
@@ -233,7 +233,7 @@ impl MatchInfo {
 		self.season
 	}
 	/// SpeedrunIGT category of the match
-	pub fn category(&self) -> MatchCategory {
+	pub fn category(&self) -> Option<MatchCategory> {
 		self.category
 	}
 	/// Date and time when the match took place
@@ -249,8 +249,8 @@ impl MatchInfo {
 		&self.spectators
 	}
 	/// Seed info
-	pub fn seed_info(&self) -> &MatchSeedInfo {
-		&self.seed
+	pub fn seed_info(&self) -> Option<&MatchSeedInfo> {
+		self.seed.as_ref()
 	}
 	/// The outcome of the match
 	pub fn result(&self) -> &MatchOutcome {

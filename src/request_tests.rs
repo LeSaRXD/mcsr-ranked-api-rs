@@ -16,3 +16,18 @@ fn user_redlime() {
 		"Check your internet connection"
 	);
 }
+
+#[test]
+#[ignore]
+fn user_matches() {
+	use std::str::FromStr;
+
+	use uuid::Uuid;
+
+	use crate::user::identifier::UserIdentifier;
+
+	let doogile_id =
+		UserIdentifier::Uuid(Uuid::from_str("3c8757790ab0400b8b9e3936e0dd535b").unwrap());
+	let request = doogile_id.get_user_matches_blocking(None);
+	assert!(request.is_ok());
+}
