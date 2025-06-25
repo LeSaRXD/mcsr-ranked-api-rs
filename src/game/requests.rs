@@ -33,7 +33,7 @@ const USER_URL: &str = "https://api.mcsrranked.com/users/{}/matches";
 /// Parameters for [`UserIdentifier::get_user_matches`]
 #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize)]
 #[serde(rename_all = "lowercase")]
-pub struct GetUserMatchesParams {
+pub struct GetMatchesParams {
 	#[serde(flatten)]
 	pub pagination: Pagination,
 	#[serde(rename = "type")]
@@ -41,7 +41,7 @@ pub struct GetUserMatchesParams {
 	pub season: Option<Season>,
 	pub exclude_decay: bool,
 }
-impl From<Pagination> for GetUserMatchesParams {
+impl From<Pagination> for GetMatchesParams {
 	fn from(pagination: Pagination) -> Self {
 		Self {
 			pagination,
@@ -52,10 +52,7 @@ impl From<Pagination> for GetUserMatchesParams {
 
 impl UserIdentifier<'_> {
 	/// GET the user's matches by identifier using given `params`
-	pub async fn get_user_matches(
-		&self,
-		params: Option<&GetUserMatchesParams>,
-	) -> Result<Box<[MatchInfo]>> {
+	pub async fn get_matches(&self, params: Option<&GetMatchesParams>) -> Result<Box<[MatchInfo]>> {
 		make_request(USER_URL, [&self.to_string()], params).await
 	}
 }
@@ -63,9 +60,9 @@ impl UserIdentifier<'_> {
 #[cfg(feature = "blocking")]
 impl UserIdentifier<'_> {
 	/// Synchronously GET the user's matches by identifier using given `params`
-	pub fn get_user_matches_blocking(
+	pub fn get_matches_blocking(
 		&self,
-		params: Option<&GetUserMatchesParams>,
+		params: Option<&GetMatchesParams>,
 	) -> Result<Box<[MatchInfo]>> {
 		make_request_blocking(USER_URL, [&self.to_string()], params)
 	}
