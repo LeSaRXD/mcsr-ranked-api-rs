@@ -1,9 +1,7 @@
 #[test]
 #[ignore]
 fn user_redlime() {
-	use std::str::FromStr;
-
-	use uuid::Uuid;
+	use uuid::uuid;
 
 	use crate::user::identifier::UserIdentifier;
 
@@ -12,7 +10,7 @@ fn user_redlime() {
 	let redlime = request.unwrap();
 	assert_eq!(
 		redlime.profile.uuid,
-		Uuid::from_str("bbc886da1b024739b4b80f1542e9f61d").unwrap(),
+		uuid!("bbc886da1b024739b4b80f1542e9f61d"),
 		"Check your internet connection"
 	);
 }
@@ -20,14 +18,11 @@ fn user_redlime() {
 #[test]
 #[ignore]
 fn user_matches() {
-	use std::str::FromStr;
-
-	use uuid::Uuid;
+	use uuid::uuid;
 
 	use crate::user::identifier::UserIdentifier;
 
-	let doogile_id =
-		UserIdentifier::Uuid(Uuid::from_str("3c8757790ab0400b8b9e3936e0dd535b").unwrap());
+	let doogile_id = UserIdentifier::Uuid(uuid!("3c8757790ab0400b8b9e3936e0dd535b"));
 	let request = doogile_id.get_user_matches_blocking(None);
 	assert!(request.is_ok());
 }

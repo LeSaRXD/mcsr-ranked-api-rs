@@ -1,7 +1,5 @@
-use std::str::FromStr;
-
 use chrono::{TimeZone, Utc};
-use uuid::Uuid;
+use uuid::uuid;
 
 use crate::{
 	game::{
@@ -46,8 +44,8 @@ fn match_info() {
 			),
 		]
 	);
-	let frigidbob = Uuid::from_str("7d3a6bb9f62645ae80cf40840ca84c50").unwrap();
-	let laysar = Uuid::from_str("79635c3dbf634a228bf44544cc7c0d27").unwrap();
+	let frigidbob = uuid!("7d3a6bb9f62645ae80cf40840ca84c50");
+	let laysar = uuid!("79635c3dbf634a228bf44544cc7c0d27");
 	assert_eq!(info.spectators(), []);
 	assert_eq!(
 		info.seed,

@@ -1,9 +1,7 @@
-use std::str::FromStr;
-
-use uuid::Uuid;
-
 use super::VersusInfo;
 use crate::user::{SupporterTier, UserProfile};
+
+use uuid::uuid;
 
 #[test]
 fn versus() {
@@ -35,48 +33,30 @@ fn versus() {
 	assert_eq!(versus.results.ranked.total, 3);
 	assert_eq!(
 		versus.results.ranked.wins.user_1(),
-		(
-			Uuid::from_str("a0c06d33c69941d09b22e0c98c4233fd").unwrap(),
-			&2
-		),
+		(uuid!("a0c06d33c69941d09b22e0c98c4233fd"), &2),
 	);
 	assert_eq!(
 		versus.results.ranked.wins.user_2(),
-		(
-			Uuid::from_str("af22aaab9ee74596a3578bd6345d25b5").unwrap(),
-			&1
-		),
+		(uuid!("af22aaab9ee74596a3578bd6345d25b5"), &1),
 	);
 
 	assert_eq!(versus.results.casual.total, 0);
 	assert_eq!(
 		versus.results.casual.wins.user_1(),
-		(
-			Uuid::from_str("a0c06d33c69941d09b22e0c98c4233fd").unwrap(),
-			&0
-		),
+		(uuid!("a0c06d33c69941d09b22e0c98c4233fd"), &0),
 	);
 	assert_eq!(
 		versus.results.casual.wins.user_2(),
-		(
-			Uuid::from_str("af22aaab9ee74596a3578bd6345d25b5").unwrap(),
-			&0
-		),
+		(uuid!("af22aaab9ee74596a3578bd6345d25b5"), &0),
 	);
 
 	assert_eq!(
 		versus.changes.user_1(),
-		(
-			Uuid::from_str("a0c06d33c69941d09b22e0c98c4233fd").unwrap(),
-			&33
-		),
+		(uuid!("a0c06d33c69941d09b22e0c98c4233fd"), &33),
 	);
 	assert_eq!(
 		versus.changes.user_2(),
-		(
-			Uuid::from_str("af22aaab9ee74596a3578bd6345d25b5").unwrap(),
-			&-33
-		),
+		(uuid!("af22aaab9ee74596a3578bd6345d25b5"), &-33),
 	);
 
 	#[cfg(feature = "serialize")]

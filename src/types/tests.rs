@@ -55,7 +55,7 @@ mod api_result {
 		use crate::user::UserProfile;
 
 		const JSON: &str = r#"{"status":"success","data":{"uuid":"7665f76f431b41c6b321bea16aff913b","nickname":"lowk3y_","roleType":0,"eloRate":1966,"eloRank":4,"country":null}}"#;
-		let result = result_from::<UserProfile>(JSON);
+		let result: DeResult<UserProfile> = result_from(JSON);
 		assert_eq!(
 			result,
 			DeResult::Success(UserProfile::new(
@@ -71,10 +71,8 @@ mod api_result {
 }
 
 mod two_user_data {
-	use std::str::FromStr;
-
 	use serde::Deserialize;
-	use uuid::Uuid;
+	use uuid::uuid;
 
 	use crate::types::TwoUserData;
 
@@ -86,17 +84,11 @@ mod two_user_data {
 
 		assert_eq!(
 			data.user_1(),
-			(
-				Uuid::from_str("a0c06d33c69941d09b22e0c98c4233fd").unwrap(),
-				&2
-			),
+			(uuid!("a0c06d33c69941d09b22e0c98c4233fd"), &2),
 		);
 		assert_eq!(
 			data.user_2(),
-			(
-				Uuid::from_str("af22aaab9ee74596a3578bd6345d25b5").unwrap(),
-				&1
-			),
+			(uuid!("af22aaab9ee74596a3578bd6345d25b5"), &1),
 		);
 	}
 
@@ -113,17 +105,11 @@ mod two_user_data {
 		let data: TestFlatten = serde_json::from_str(JSON).unwrap();
 		assert_eq!(
 			data.two_user.user_1(),
-			(
-				Uuid::from_str("a0c06d33c69941d09b22e0c98c4233fd").unwrap(),
-				&2
-			)
+			(uuid!("a0c06d33c69941d09b22e0c98c4233fd"), &2)
 		);
 		assert_eq!(
 			data.two_user.user_2(),
-			(
-				Uuid::from_str("af22aaab9ee74596a3578bd6345d25b5").unwrap(),
-				&1
-			)
+			(uuid!("af22aaab9ee74596a3578bd6345d25b5"), &1)
 		);
 		assert_eq!(data.total, 3);
 	}
