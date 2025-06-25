@@ -312,6 +312,12 @@ fn match_info() {
 		]
 	);
 	assert!(!full_info.replay_exists);
+	#[cfg(feature = "serialize")]
+	{
+		let re_deserialized: AdvancedMatchInfo =
+			serde_json::from_str(&serde_json::to_string(&full_info).unwrap()).unwrap();
+		assert_eq!(full_info, re_deserialized)
+	}
 }
 
 #[test]
@@ -480,4 +486,24 @@ fn bastion_type() {
 		BastionType::Stables
 	);
 	assert!(serde_json::from_str::<BastionType>(r#""DOESN'T EXIST""#).is_err());
+
+	#[cfg(feature = "serialize")]
+	{
+		assert_eq!(
+			serde_json::to_string(&BastionType::Housing).unwrap(),
+			r#""HOUSING""#
+		);
+		assert_eq!(
+			serde_json::to_string(&BastionType::Treasure).unwrap(),
+			r#""TREASURE""#
+		);
+		assert_eq!(
+			serde_json::to_string(&BastionType::Bridge).unwrap(),
+			r#""BRIDGE""#
+		);
+		assert_eq!(
+			serde_json::to_string(&BastionType::Stables).unwrap(),
+			r#""STABLES""#
+		);
+	}
 }

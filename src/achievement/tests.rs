@@ -14,8 +14,9 @@ fn achievment_err_from(json: &str) -> serde_json::Error {
 fn best_time() {
 	const JSON: &str =
 		r#"{"id":"bestTime","date":1706839603,"data":[],"level":10,"goal":419999,"value":null}"#;
+	let achievement = achievment_from(JSON);
 	assert_eq!(
-		achievment_from(JSON),
+		achievement,
 		Achievement {
 			date: Utc.timestamp_opt(1706839603, 0).unwrap(),
 			data: AchievementData::BestTime,
@@ -24,14 +25,21 @@ fn best_time() {
 			value: None,
 		}
 	);
+
+	#[cfg(feature = "serialize")]
+	{
+		let re_deserialized = achievment_from(&serde_json::to_string(&achievement).unwrap());
+		assert_eq!(re_deserialized, achievement);
+	}
 }
 
 #[test]
 fn highest_win_streak() {
 	const JSON: &str =
 		r#"{"id":"highestWinStreak","date":1706839603,"data":[],"level":7,"goal":25,"value":null}"#;
+	let achievement = achievment_from(JSON);
 	assert_eq!(
-		achievment_from(JSON),
+		achievement,
 		Achievement {
 			date: Utc.timestamp_opt(1706839603, 0).unwrap(),
 			data: AchievementData::HighestWinStreak,
@@ -40,14 +48,20 @@ fn highest_win_streak() {
 			value: None,
 		}
 	);
+	#[cfg(feature = "serialize")]
+	{
+		let re_deserialized = achievment_from(&serde_json::to_string(&achievement).unwrap());
+		assert_eq!(re_deserialized, achievement);
+	}
 }
 
 #[test]
 fn played_matches() {
 	const JSON: &str =
 		r#"{"id":"playedMatches","date":1706839603,"data":[],"level":10,"goal":5000,"value":null}"#;
+	let achievement = achievment_from(JSON);
 	assert_eq!(
-		achievment_from(JSON),
+		achievement,
 		Achievement {
 			date: Utc.timestamp_opt(1706839603, 0).unwrap(),
 			data: AchievementData::PlayedMatches,
@@ -56,14 +70,20 @@ fn played_matches() {
 			value: None,
 		}
 	);
+	#[cfg(feature = "serialize")]
+	{
+		let re_deserialized = achievment_from(&serde_json::to_string(&achievement).unwrap());
+		assert_eq!(re_deserialized, achievement);
+	}
 }
 
 #[test]
 fn playtime() {
 	const JSON: &str =
 		r#"{"id":"playtime","date":1706839603,"data":[],"level":7,"goal":1800000000,"value":null}"#;
+	let achievement = achievment_from(JSON);
 	assert_eq!(
-		achievment_from(JSON),
+		achievement,
 		Achievement {
 			date: Utc.timestamp_opt(1706839603, 0).unwrap(),
 			data: AchievementData::Playtime,
@@ -72,14 +92,20 @@ fn playtime() {
 			value: None,
 		}
 	);
+	#[cfg(feature = "serialize")]
+	{
+		let re_deserialized = achievment_from(&serde_json::to_string(&achievement).unwrap());
+		assert_eq!(re_deserialized, achievement);
+	}
 }
 
 #[test]
 fn wins() {
 	const JSON: &str =
 		r#"{"id":"wins","date":1706839603,"data":[],"level":9,"goal":2000,"value":null}"#;
+	let achievement = achievment_from(JSON);
 	assert_eq!(
-		achievment_from(JSON),
+		achievement,
 		Achievement {
 			date: Utc.timestamp_opt(1706839603, 0).unwrap(),
 			data: AchievementData::Wins,
@@ -88,14 +114,20 @@ fn wins() {
 			value: None,
 		}
 	);
+	#[cfg(feature = "serialize")]
+	{
+		let re_deserialized = achievment_from(&serde_json::to_string(&achievement).unwrap());
+		assert_eq!(re_deserialized, achievement);
+	}
 }
 
 #[test]
 fn season_result_ok() {
 	const JSON: &str =
 		r#"{"id":"seasonResult","date":1724198414,"data":["5","2"],"level":2,"value":null}"#;
+	let achievement = achievment_from(JSON);
 	assert_eq!(
-		achievment_from(JSON),
+		achievement,
 		Achievement {
 			date: Utc.timestamp_opt(1724198414, 0).unwrap(),
 			data: AchievementData::SeasonOutcome { season: 5, rank: 2 },
@@ -104,6 +136,11 @@ fn season_result_ok() {
 			value: None,
 		}
 	);
+	#[cfg(feature = "serialize")]
+	{
+		let re_deserialized = achievment_from(&serde_json::to_string(&achievement).unwrap());
+		assert_eq!(re_deserialized, achievement);
+	}
 }
 
 #[test]

@@ -1,20 +1,28 @@
-use serde::{de::DeserializeOwned, Deserialize, Serialize};
+use serde::{de::DeserializeOwned, Serialize};
 
 use crate::{types::DeResult, Result};
 
 #[cfg(test)]
 mod tests;
 
-pub(crate) fn string_u64<'de, T, D>(de: D) -> Result<T, D::Error>
-where
-	D: serde::Deserializer<'de>,
-	T: std::str::FromStr,
-	<T as std::str::FromStr>::Err: std::fmt::Display,
-{
-	let value = String::deserialize(de)?;
-	value
-		.parse()
-		.map_err(|_| serde::de::Error::invalid_type(serde::de::Unexpected::Str(&value), &"a u64"))
+pub(crate) mod string_u64 {
+	use serde::{Deserialize, Serialize, Serializer};
+
+	pub(crate) fn serialize<S>(value: &u64, serializer: S) -> Result<S::Ok, S::Error>
+	where
+		S: Serializer,
+	{
+		value.to_string().serialize(serializer)
+	}
+	pub(crate) fn deserialize<'de, D>(deserializer: D) -> Result<u64, D::Error>
+	where
+		D: serde::Deserializer<'de>,
+	{
+		let value = String::deserialize(deserializer)?;
+		value.parse().map_err(|_| {
+			serde::de::Error::invalid_type(serde::de::Unexpected::Str(&value), &"a u64")
+		})
+	}
 }
 
 fn construct_url<'v, V, S>(

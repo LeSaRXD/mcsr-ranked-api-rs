@@ -1,6 +1,6 @@
 [package]
 name = "mcsr-ranked-api"
-version = "0.3.1"
+version = "0.4.0"
 edition = "2021"
 description = "MCSR Ranked API wrapper in Rust"
 license-file = "LICENSE.txt"
@@ -18,7 +18,8 @@ matches = []
 weekly_races = []
 leaderboards = []
 blocking = []
-all = ["achievements", "matches", "weekly_races", "blocking", "leaderboards"]
+serialize = []
+all = ["achievements", "matches", "weekly_races", "blocking", "leaderboards", "serialize"]
 
 [dependencies]
 chrono = { version = "0.4.41", features = ["serde"] }

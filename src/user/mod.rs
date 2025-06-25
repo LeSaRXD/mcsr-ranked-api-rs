@@ -3,6 +3,8 @@ use std::fmt::Debug;
 use serde::Deserialize;
 use serde_repr::Deserialize_repr;
 use uuid::Uuid;
+#[cfg(feature = "serialize")]
+use {serde::Serialize, serde_repr::Serialize_repr};
 
 use crate::types::{Elo, Rank};
 
@@ -12,6 +14,7 @@ pub mod requests;
 #[cfg(test)]
 mod tests;
 
+#[cfg_attr(feature = "serialize", derive(Serialize_repr))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Deserialize_repr)]
 #[repr(u8)]
 pub enum SupporterTier {
@@ -22,6 +25,7 @@ pub enum SupporterTier {
 }
 
 /// A user's profile
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct UserProfile {
@@ -34,29 +38,4 @@ pub struct UserProfile {
 	#[serde(rename = "eloRank")]
 	pub rank: Option<Rank>,
 	pub country: Option<Box<str>>,
-}
-
-#[cfg(test)]
-impl UserProfile {
-	pub(crate) fn new<U>(
-		uuid: U,
-		name: &str,
-		supporter_tier: SupporterTier,
-		elo: Option<Elo>,
-		rank: Option<Rank>,
-		country: Option<&str>,
-	) -> Self
-	where
-		U: TryInto<Uuid>,
-		U::Error: Debug,
-	{
-		Self {
-			uuid: uuid.try_into().expect("Expected a valid uuid"),
-			nickname: name.into(),
-			supporter_tier,
-			elo,
-			rank,
-			country: country.map(Into::into),
-		}
-	}
 }

@@ -1,10 +1,17 @@
 use chrono::{serde::ts_seconds, DateTime, Utc};
 use serde::{de, Deserialize, Deserializer};
+#[cfg(feature = "serialize")]
+use serde::{ser::SerializeMap, Serialize};
 
 use crate::types::{Rank, Season};
 
 #[cfg(test)]
 mod tests;
+
+pub type AchievementLevel = u64;
+pub type AchievementGoal = u64;
+pub type AchievementValue = u64;
+
 /// Achievement type and the type's associated data
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AchievementData {
@@ -30,12 +37,44 @@ pub enum AchievementData {
 	Secret { id: Box<str>, data: Box<[Box<str>]> },
 }
 
-pub type AchievementLevel = u64;
-pub type AchievementGoal = u64;
-pub type AchievementValue = u64;
+#[cfg(feature = "serialize")]
+impl AchievementData {
+	fn id_data(&self) -> (&str, Box<[Box<str>]>) {
+		let id = match self {
+			Self::BestTime => "bestTime",
+			Self::HighestWinStreak => "highestWinStreak",
+			Self::PlayedMatches => "playedMatches",
+			Self::Playtime => "playtime",
+			Self::Wins => "wins",
+			Self::SummonWither => "summonWither",
+			Self::IronPickless => "ironPickless",
+			Self::Oneshot => "oneshot",
+			Self::Overtake => "overtake",
+			Self::Foodless => "foodless",
+			Self::ClassicRun => "classicRun",
+			Self::Netherite => "netherite",
+			Self::Armorless => "armorless",
+			Self::HighLevel => "highLevel",
+			Self::EgapHolder => "egapHolder",
+			Self::IronHoe => "ironHoe",
+			Self::SeasonOutcome { season, rank } => {
+				return (
+					"seasonResult",
+					[season.to_string().into(), rank.to_string().into()].into(),
+				)
+			}
+			Self::PlayoffsOutcome { season } => {
+				return ("playoffsResult", [season.to_string().into()].into())
+			}
+			Self::WeeklyRace { count } => return ("weeklyRace", [count.to_string().into()].into()),
+			Self::Secret { id, data } => return (id, data.to_owned()),
+		};
+		(id, [].into())
+	}
+}
 
 #[derive(Deserialize)]
-pub struct ApiAchievement {
+struct ApiAchievement {
 	id: Box<str>,
 	#[serde(with = "ts_seconds")]
 	date: DateTime<Utc>,
@@ -48,29 +87,21 @@ pub struct ApiAchievement {
 /// User's achievement. `data` contains achievement type and associated data
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Achievement {
+	/// The date the achievement was acquired
 	date: DateTime<Utc>,
+	/// The type and data of the achievement
 	data: AchievementData,
+	/// The level of the achievement
 	level: AchievementLevel,
+	/// The goal to level up the achievement
 	goal: Option<AchievementGoal>,
+	/// The value of the achievement
 	value: Option<AchievementValue>,
 }
 
 impl Achievement {
-	/// The date the achievement was acquired
-	pub fn date(&self) -> DateTime<Utc> {
-		self.date
-	}
-	/// The type and data of the achievement
 	pub fn data(&self) -> &AchievementData {
 		&self.data
-	}
-	/// The level of the achievement
-	pub fn level(&self) -> AchievementLevel {
-		self.level
-	}
-	/// The goal to level up the achievement
-	pub fn goal(&self) -> Option<AchievementGoal> {
-		self.goal
 	}
 }
 
@@ -150,5 +181,23 @@ impl<'de> Deserialize<'de> for Achievement {
 			goal,
 			value,
 		})
+	}
+}
+
+#[cfg(feature = "serialize")]
+impl Serialize for Achievement {
+	fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+	where
+		S: serde::Serializer,
+	{
+		let (id, data) = self.data.id_data();
+		let mut map = serializer.serialize_map(Some(6))?;
+		map.serialize_entry("id", id)?;
+		map.serialize_entry("data", &data)?;
+		map.serialize_entry("level", &self.level)?;
+		map.serialize_entry("date", &self.date.timestamp())?;
+		map.serialize_entry("goal", &self.goal)?;
+		map.serialize_entry("value", &self.value)?;
+		map.end()
 	}
 }

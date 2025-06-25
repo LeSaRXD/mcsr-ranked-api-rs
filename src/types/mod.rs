@@ -1,13 +1,11 @@
 use std::{
+	collections::HashMap,
 	fmt::{self, Display},
-	marker::PhantomData,
-	str::FromStr,
 };
 
-use serde::{
-	de::{self, MapAccess, Visitor},
-	Deserialize, Deserializer,
-};
+#[cfg(feature = "serialize")]
+use serde::Serialize;
+use serde::{de, ser::SerializeMap, Deserialize, Deserializer};
 use uuid::Uuid;
 
 #[cfg(test)]
@@ -25,7 +23,9 @@ pub type MatchId = u64;
 pub type WeeklyRaceId = u32;
 pub type MinecraftSeed = u64;
 
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[serde(transparent)]
 pub struct Time(pub u64);
 
 impl Time {
@@ -78,7 +78,7 @@ impl From<reqwest::Error> for Error {
 }
 
 impl Display for Error {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		match self {
 			Error::Api(Some(api_err)) => write!(f, "API Error: {}", api_err),
 			Error::Api(None) => f.write_str("API Error! (No message)"),
@@ -105,6 +105,7 @@ impl<T> From<DeResult<T>> for Result<T> {
 }
 
 /// Container for ranked and casual values
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct RankedAndCasual<T> {
 	pub ranked: T,
@@ -135,48 +136,30 @@ impl<'de, T: Deserialize<'de>> Deserialize<'de> for TwoUserData<T> {
 	where
 		D: Deserializer<'de>,
 	{
-		struct TwoUserDataVisitor<T> {
-			_phantom: PhantomData<T>,
-		}
-
-		impl<'de, T: Deserialize<'de>> Visitor<'de> for TwoUserDataVisitor<T> {
-			type Value = TwoUserData<T>;
-
-			fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-				formatter.write_str("struct TwoUserData")
-			}
-
-			fn visit_map<V>(self, mut map: V) -> Result<Self::Value, V::Error>
-			where
-				V: MapAccess<'de>,
-			{
-				let mut user_1 = None;
-				let mut user_2 = None;
-
-				while let Some(key) = map.next_key()? {
-					if let Ok(uuid) = Uuid::from_str(key) {
-						match (&user_1, &user_2) {
-							(None, None) => user_1 = Some((uuid, map.next_value()?)),
-							(Some(_), None) => user_2 = Some((uuid, map.next_value()?)),
-							_ => return Err(de::Error::duplicate_field("user_2")),
-						}
-					}
-				}
-
-				let user_1 = user_1.ok_or_else(|| de::Error::missing_field("user_1"))?;
-				let user_2 = user_2.ok_or_else(|| de::Error::missing_field("user_2"))?;
-
-				Ok(TwoUserData {
-					user_1_uuid: user_1.0,
-					user_1_data: user_1.1,
-					user_2_uuid: user_2.0,
-					user_2_data: user_2.1,
-				})
-			}
-		}
-
-		deserializer.deserialize_map(TwoUserDataVisitor {
-			_phantom: PhantomData::<T>,
+		let mut entries = HashMap::<Uuid, T>::deserialize(deserializer)?
+			.into_iter()
+			.collect::<Vec<_>>();
+		entries.sort_by_key(|(uuid, _)| *uuid);
+		let [(user_1_uuid, user_1_data), (user_2_uuid, user_2_data)] = entries
+			.try_into()
+			.map_err(|err: Vec<_>| de::Error::invalid_length(err.len(), &"2"))?;
+		Ok(TwoUserData {
+			user_1_uuid,
+			user_1_data,
+			user_2_uuid,
+			user_2_data,
 		})
+	}
+}
+#[cfg(feature = "serialize")]
+impl<T: Serialize> Serialize for TwoUserData<T> {
+	fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
+	where
+		S: serde::Serializer,
+	{
+		let mut map = serializer.serialize_map(Some(2))?;
+		map.serialize_entry(&self.user_1_uuid, &self.user_1_data)?;
+		map.serialize_entry(&self.user_2_uuid, &self.user_2_data)?;
+		map.end()
 	}
 }

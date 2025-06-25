@@ -36,5 +36,11 @@ fn leaderboard() {
 			rank: 1,
 			phase_point: 40,
 		}
-	)
+	);
+
+	#[cfg(feature = "serialize")]
+	{
+		let re_deserialized: EloLeaderboardInfo = serde_json::from_str(JSON).unwrap();
+		assert_eq!(re_deserialized, leaderboard);
+	}
 }

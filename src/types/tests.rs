@@ -109,7 +109,7 @@ mod two_user_data {
 
 	#[test]
 	fn with_flatten() {
-		const JSON: &str = r#"{"a0c06d33c69941d09b22e0c98c4233fd":2,"af22aaab9ee74596a3578bd6345d25b5":1,"total":3}"#;
+		const JSON: &str = r#"{"af22aaab9ee74596a3578bd6345d25b5":1,"a0c06d33c69941d09b22e0c98c4233fd":2,"total":3}"#;
 		let data: TestFlatten = serde_json::from_str(JSON).unwrap();
 		assert_eq!(
 			data.two_user.user_1(),

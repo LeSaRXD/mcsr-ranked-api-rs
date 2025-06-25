@@ -78,4 +78,15 @@ fn versus() {
 			&-33
 		),
 	);
+
+	#[cfg(feature = "serialize")]
+	{
+		println!("{}", serde_json::to_string(&versus).unwrap());
+		let re_deserialized: VersusInfo =
+			serde_json::from_str(&serde_json::to_string(&versus).unwrap()).unwrap();
+		assert_eq!(
+			re_deserialized, versus,
+			"Re-deserialized info does not match initial info"
+		);
+	}
 }

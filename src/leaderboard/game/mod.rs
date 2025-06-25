@@ -2,6 +2,8 @@ use std::ops::Deref;
 
 use chrono::{serde::ts_seconds, DateTime, Utc};
 use serde::Deserialize;
+#[cfg(feature = "serialize")]
+use serde::Serialize;
 
 use crate::{
 	types::{MatchId, Rank, Season, Time},
@@ -13,6 +15,7 @@ pub mod requests;
 mod tests;
 
 /// Info about a specific best time
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BestTimeInfo {
@@ -25,6 +28,7 @@ pub struct BestTimeInfo {
 	pub user: UserProfile,
 }
 
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct BestTimeLeaderboard(pub Box<[BestTimeInfo]>);
 

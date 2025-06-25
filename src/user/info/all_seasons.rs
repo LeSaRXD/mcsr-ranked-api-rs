@@ -1,6 +1,8 @@
 use std::collections::HashMap;
 
 use serde::{de::Unexpected, Deserialize, Deserializer};
+#[cfg(feature = "serialize")]
+use serde::{Serialize, Serializer};
 
 use crate::{
 	types::Season,
@@ -8,12 +10,14 @@ use crate::{
 };
 
 /// The user info containing the results of all seasons
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AllSeasonUserInfo {
 	#[serde(flatten)]
 	pub profile: UserProfile,
 	#[serde(deserialize_with = "de_season_results")]
+	#[cfg_attr(feature = "serialize", serde(serialize_with = "se_season_results"))]
 	pub season_results: Box<[Option<UserSeasonOutcome>]>,
 }
 impl AllSeasonUserInfo {
@@ -57,4 +61,24 @@ where
 		res[idx] = Some(info);
 	}
 	Ok(res.into_boxed_slice())
+}
+
+#[cfg(feature = "serialize")]
+fn se_season_results<S>(
+	value: &[Option<UserSeasonOutcome>],
+	serializer: S,
+) -> Result<S::Ok, S::Error>
+where
+	S: Serializer,
+{
+	use serde::ser::SerializeMap;
+
+	let len = value.iter().filter(|v| v.is_some()).count();
+	let mut map = serializer.serialize_map(Some(len))?;
+	for (season, outcome) in value.iter().enumerate() {
+		if let Some(outcome) = outcome.as_ref() {
+			map.serialize_entry(&season.to_string(), outcome)?;
+		}
+	}
+	map.end()
 }

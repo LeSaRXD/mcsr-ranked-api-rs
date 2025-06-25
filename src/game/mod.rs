@@ -1,6 +1,8 @@
 use chrono::DateTime;
 use chrono::{serde::ts_seconds, Utc};
 use serde::Deserialize;
+#[cfg(feature = "serialize")]
+use serde::Serialize;
 use serde_repr::{Deserialize_repr, Serialize_repr};
 use uuid::Uuid;
 
@@ -13,6 +15,7 @@ pub mod requests;
 mod tests;
 pub mod versus;
 
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum MatchCategory {
@@ -43,8 +46,10 @@ pub enum MatchCategory {
 	MineAChunk,
 }
 
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct MatchSeedInfo {
+	/// Id of the seed (not the seed itself)
 	pub id: Option<Box<str>>,
 	pub overworld: Option<OverworldType>,
 	pub bastion: Option<BastionType>,
@@ -66,6 +71,7 @@ pub enum MatchType {
 	Event = 4,
 }
 
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MatchOutcome {
@@ -75,6 +81,7 @@ pub struct MatchOutcome {
 }
 
 /// Match leaderboard ranking
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MatchRank {
@@ -83,6 +90,7 @@ pub struct MatchRank {
 }
 
 /// Match contestant's elo update
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MatchEloUpdate {
@@ -94,6 +102,7 @@ pub struct MatchEloUpdate {
 }
 
 /// Seed type (overworld)
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum OverworldType {
@@ -105,6 +114,7 @@ pub enum OverworldType {
 }
 
 /// Bastion type
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum BastionType {
@@ -115,6 +125,7 @@ pub enum BastionType {
 }
 
 /// Match completion info
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MatchCompletion {
@@ -124,6 +135,7 @@ pub struct MatchCompletion {
 }
 
 /// Match timeline event
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MatchTimelineEvent {
@@ -140,6 +152,7 @@ impl MatchTimelineEvent {
 }
 
 /// Match info
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MatchInfo {
@@ -176,13 +189,17 @@ impl MatchInfo {
 }
 
 /// Advanced (full) match info
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AdvancedMatchInfo {
+	/// The base info about the match
 	#[serde(flatten)]
 	info: MatchInfo,
+	/// Which players completed the match
 	completions: Box<[MatchCompletion]>,
 	#[serde(rename = "timelines")]
+	/// Advancements and other events that happened during the match
 	timeline_events: Box<[MatchTimelineEvent]>,
 	#[serde(rename = "replayExist")]
 	replay_exists: bool,

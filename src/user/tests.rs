@@ -1,10 +1,39 @@
+use std::fmt::Debug;
+
 use uuid::Uuid;
 
-use crate::user::{
-	identifier::UserIdentifier,
-	info::{all_seasons::AllSeasonUserInfo, PhaseInfo, UserSeasonOutcome},
-	SupporterTier, UserProfile,
+use crate::{
+	types::{Elo, Rank},
+	user::{
+		identifier::UserIdentifier,
+		info::{all_seasons::AllSeasonUserInfo, PhaseInfo, UserSeasonOutcome},
+		SupporterTier, UserProfile,
+	},
 };
+
+impl UserProfile {
+	pub(crate) fn new<U>(
+		uuid: U,
+		name: &str,
+		supporter_tier: SupporterTier,
+		elo: Option<Elo>,
+		rank: Option<Rank>,
+		country: Option<&str>,
+	) -> Self
+	where
+		U: TryInto<Uuid>,
+		U::Error: Debug,
+	{
+		Self {
+			uuid: uuid.try_into().expect("Expected a valid uuid"),
+			nickname: name.into(),
+			supporter_tier,
+			elo,
+			rank,
+			country: country.map(Into::into),
+		}
+	}
+}
 
 #[test]
 fn user_profile() {

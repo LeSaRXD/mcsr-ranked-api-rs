@@ -1,4 +1,6 @@
 use serde::Deserialize;
+#[cfg(feature = "serialize")]
+use serde::Serialize;
 
 use crate::{
 	types::{Elo, PhasePoints, Rank},
@@ -12,6 +14,7 @@ pub mod phase;
 pub mod requests;
 
 /// Season result specific to leaderboards
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LeaderboardSeasonOutcome {
@@ -23,6 +26,7 @@ pub struct LeaderboardSeasonOutcome {
 }
 
 /// User data specific to leaderboards
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LeaderboardUser {

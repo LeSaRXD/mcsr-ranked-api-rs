@@ -1,5 +1,7 @@
 use chrono::{serde::ts_seconds, DateTime, Utc};
 use serde::Deserialize;
+#[cfg(feature = "serialize")]
+use serde::Serialize;
 
 #[cfg(feature = "weekly_races")]
 use crate::types::WeeklyRaceId;
@@ -15,20 +17,22 @@ pub mod result;
 pub mod tests;
 
 /// Seeds for overworld, nether, end and RNG
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct WeeklyRaceSeedInfo {
-	#[serde(deserialize_with = "string_u64")]
+	#[serde(with = "string_u64")]
 	pub overworld: MinecraftSeed,
-	#[serde(deserialize_with = "string_u64")]
+	#[serde(with = "string_u64")]
 	pub nether: MinecraftSeed,
-	#[serde(deserialize_with = "string_u64")]
+	#[serde(with = "string_u64")]
 	pub the_end: MinecraftSeed,
-	#[serde(deserialize_with = "string_u64")]
+	#[serde(with = "string_u64")]
 	pub rng: MinecraftSeed,
 }
 
 /// Seeds for overworld, nether, end and RNG
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct WeeklyRaceLeaderboardRecord {
@@ -39,10 +43,12 @@ pub struct WeeklyRaceLeaderboardRecord {
 	/// The final time
 	pub time: Time,
 	/// Whether the replay exists
-	pub replay_exist: bool,
+	#[serde(rename = "replayExist")]
+	pub replay_exists: bool,
 }
 
 /// Weekly race info
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct WeeklyRaceLeaderboardInfo {

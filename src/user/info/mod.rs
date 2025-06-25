@@ -3,6 +3,8 @@ pub mod all_seasons;
 use chrono::serde::{ts_seconds, ts_seconds_option};
 use chrono::{DateTime, Utc};
 use serde::Deserialize;
+#[cfg(feature = "serialize")]
+use serde::Serialize;
 
 use super::UserProfile;
 #[cfg(feature = "achievements")]
@@ -14,6 +16,7 @@ use crate::weekly_race::result::WeeklyRaceResult;
 /// Displayed and total achievements of a user
 #[cfg(feature = "achievements")]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[serde(rename_all = "camelCase")]
 pub struct UserAchievements {
 	/// Achievements the user chose to display on their profile
@@ -33,6 +36,7 @@ impl UserAchievements {
 	}
 }
 
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct UserTimestamps {
@@ -50,6 +54,7 @@ pub struct UserTimestamps {
 pub type Stat = RankedAndCasual<Option<u64>>;
 
 /// All of the user's statistics
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct UserStats {
@@ -67,6 +72,7 @@ pub struct UserStats {
 }
 
 /// All statistics for season and total
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct UserStatistics {
@@ -75,6 +81,7 @@ pub struct UserStatistics {
 }
 
 /// User's social connection
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct UserConnection {
@@ -83,6 +90,7 @@ pub struct UserConnection {
 }
 
 /// All of user's connections
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct UserConnections {
@@ -94,6 +102,7 @@ pub struct UserConnections {
 	pub youtube: Option<UserConnection>,
 }
 
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EloPointsInfo {
@@ -105,6 +114,7 @@ pub struct EloPointsInfo {
 	pub points: PhasePoints,
 }
 
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PhaseInfo {
@@ -127,6 +137,7 @@ impl PhaseInfo {
 }
 
 /// Season result
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct UserSeasonOutcome {
@@ -166,6 +177,7 @@ impl UserSeasonOutcome {
 }
 
 /// All of user's data combined
+#[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct UserInfo {
