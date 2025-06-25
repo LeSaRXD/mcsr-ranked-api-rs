@@ -6,8 +6,11 @@ use crate::{types::DeResult, Result};
 mod tests;
 
 pub(crate) mod string_u64 {
-	use serde::{Deserialize, Serialize, Serializer};
+	use serde::Deserialize;
+	#[cfg(feature = "serialize")]
+	use serde::{Serialize, Serializer};
 
+	#[cfg(feature = "serialize")]
 	pub(crate) fn serialize<S>(value: &u64, serializer: S) -> Result<S::Ok, S::Error>
 	where
 		S: Serializer,

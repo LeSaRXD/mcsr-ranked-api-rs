@@ -3,9 +3,9 @@ use std::{
 	fmt::{self, Display},
 };
 
+use serde::{de, Deserialize, Deserializer};
 #[cfg(feature = "serialize")]
-use serde::Serialize;
-use serde::{de, ser::SerializeMap, Deserialize, Deserializer};
+use serde::{ser::SerializeMap, Serialize};
 use uuid::Uuid;
 
 #[cfg(test)]
