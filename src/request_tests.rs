@@ -1,3 +1,5 @@
+use crate::pagination::Pagination;
+
 #[test]
 #[ignore]
 fn user_redlime() {
@@ -23,6 +25,8 @@ fn user_matches() {
 	use crate::user::identifier::UserIdentifier;
 
 	let doogile_id = UserIdentifier::Uuid(uuid!("3c8757790ab0400b8b9e3936e0dd535b"));
-	let request = doogile_id.get_user_matches_blocking(None);
+	let params = Pagination::count(100).unwrap().into();
+	let request = doogile_id.get_matches_blocking(Some(&params));
+	println!("{request:?}");
 	assert!(request.is_ok());
 }
