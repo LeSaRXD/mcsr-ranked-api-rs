@@ -80,9 +80,9 @@ impl From<reqwest::Error> for Error {
 impl Display for Error {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		match self {
-			Error::Api(Some(api_err)) => write!(f, "API Error: {}", api_err),
+			Error::Api(Some(api_err)) => write!(f, "API Error: {api_err}"),
 			Error::Api(None) => f.write_str("API Error! (No message)"),
-			Error::Reqwest(req_err) => write!(f, "Reqwest Error: {}", req_err),
+			Error::Reqwest(req_err) => write!(f, "Reqwest Error: {req_err}"),
 		}
 	}
 }

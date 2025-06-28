@@ -5,7 +5,7 @@ use crate::{types::DeResult, Result};
 #[cfg(test)]
 mod tests;
 
-#[cfg(feature = "serialize")]
+#[cfg(all(feature = "serialize", feature = "variations"))]
 pub(crate) mod ser_str;
 
 pub(crate) mod string_u64 {

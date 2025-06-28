@@ -16,8 +16,8 @@ pub enum UserIdentifier<'a> {
 impl Display for UserIdentifier<'_> {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match &self {
-			Self::Uuid(uuid) => write!(f, "{}", uuid),
-			Self::Nickname(name) => write!(f, "{}", name),
+			Self::Uuid(uuid) => write!(f, "{uuid}"),
+			Self::Nickname(name) => write!(f, "{name}"),
 			Self::DiscordId(snowflake) => write!(f, "discord.{snowflake}"),
 		}
 	}
