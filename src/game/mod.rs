@@ -9,6 +9,8 @@ use uuid::Uuid;
 use crate::types::Time;
 use crate::types::{Elo, EloChange, MatchId, Rank, Season};
 use crate::user::UserProfile;
+#[cfg(feature = "variations")]
+use crate::variations::Variation;
 
 pub mod requests;
 #[cfg(test)]
@@ -53,12 +55,27 @@ pub struct MatchSeedInfo {
 	pub id: Option<Box<str>>,
 	pub overworld: Option<OverworldType>,
 	pub bastion: Option<BastionType>,
+	/// The heights of the 4 zero-cyclable end towers
+	#[serde(default)]
+	pub end_towers: Option<[u8; 4]>,
+	#[serde(default)]
+	#[cfg(feature = "variations")]
+	pub variations: Box<[Variation]>,
+	#[cfg(not(feature = "variations"))]
 	pub variations: Box<[Box<str>]>,
 }
 impl MatchSeedInfo {
 	/// Id of the seed (not the seed itself)
 	pub fn id(&self) -> Option<&str> {
 		self.id.as_ref().map(AsRef::as_ref)
+	}
+	#[cfg(not(feature = "variations"))]
+	pub fn variations(&self) -> &[Box<str>] {
+		self.variations.as_ref()
+	}
+	#[cfg(feature = "variations")]
+	pub fn variations(&self) -> &[Variation] {
+		self.variations.as_ref()
 	}
 }
 

@@ -54,6 +54,7 @@ fn match_info() {
 			overworld: Some(OverworldType::Village),
 			bastion: Some(BastionType::Housing),
 			variations: [].into(),
+			end_towers: None,
 		})
 	);
 	assert_eq!(

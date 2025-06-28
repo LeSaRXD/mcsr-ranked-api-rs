@@ -5,6 +5,9 @@ use crate::{types::DeResult, Result};
 #[cfg(test)]
 mod tests;
 
+#[cfg(feature = "serialize")]
+pub(crate) mod ser_str;
+
 pub(crate) mod string_u64 {
 	use serde::Deserialize;
 	#[cfg(feature = "serialize")]

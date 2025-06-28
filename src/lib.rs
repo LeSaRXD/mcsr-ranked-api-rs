@@ -8,6 +8,8 @@ pub mod leaderboard;
 pub mod pagination;
 pub mod types;
 pub mod user;
+#[cfg(feature = "variations")]
+pub mod variations;
 #[cfg(feature = "weekly_races")]
 pub mod weekly_race;
 
