@@ -54,6 +54,7 @@ pub struct MatchSeedInfo {
 	/// Id of the seed (not the seed itself)
 	pub id: Option<Box<str>>,
 	pub overworld: Option<OverworldType>,
+	#[serde(rename = "nether")]
 	pub bastion: Option<BastionType>,
 	/// The heights of the 4 zero-cyclable end towers
 	#[serde(default)]
