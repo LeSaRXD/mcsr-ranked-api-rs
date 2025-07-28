@@ -57,6 +57,8 @@ fn match_info() {
 			end_towers: None,
 		})
 	);
+	assert_eq!(info.overworld_type(), Some(OverworldType::Village));
+	assert_eq!(info.bastion_type(), Some(BastionType::Housing));
 	assert_eq!(
 		info.result,
 		MatchOutcome {

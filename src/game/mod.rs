@@ -204,6 +204,14 @@ impl MatchInfo {
 	pub fn elo_updates(&self) -> &[MatchEloUpdate] {
 		&self.elo_updates
 	}
+	/// Get the overworld type of the match
+	pub fn overworld_type(&self) -> Option<OverworldType> {
+		self.seed.as_ref().and_then(|s| s.overworld)
+	}
+	/// Get the bastion type of the match
+	pub fn bastion_type(&self) -> Option<BastionType> {
+		self.seed.as_ref().and_then(|s| s.bastion)
+	}
 }
 
 /// Advanced (full) match info
