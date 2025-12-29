@@ -107,7 +107,7 @@ impl<T> From<DeResult<T>> for Result<T> {
 /// Container for ranked and casual values
 #[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
-pub struct RankedAndCasual<T> {
+pub struct RankedAndCasual<T = u64> {
 	pub ranked: T,
 	pub casual: T,
 }

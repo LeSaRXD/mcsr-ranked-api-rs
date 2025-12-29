@@ -6,9 +6,7 @@ fn main() {
 	let user_data = user_id.get_user_blocking(None).unwrap();
 
 	let stats = user_data.statistics.season;
-	let average = stats.completion_time.ranked.unwrap_or_default()
-		/ stats.completions.ranked.unwrap_or(0).max(1)
-		/ 1000;
+	let average = stats.completion_time.ranked / stats.completions.ranked.max(1) / 1000;
 
 	println!(
 		"{}'s average ranked completion time is {} minutes {} seconds",

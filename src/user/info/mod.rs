@@ -50,25 +50,22 @@ pub struct UserTimestamps {
 	next_decay: Option<DateTime<Utc>>,
 }
 
-/// Single statistic in ranked and casual modes
-pub type Stat = RankedAndCasual<Option<u64>>;
-
 /// All of the user's statistics
 #[cfg_attr(feature = "serialize", derive(Serialize))]
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct UserStats {
-	pub best_time: Stat,
-	pub highest_win_streak: Stat,
-	pub current_win_streak: Stat,
-	pub played_matches: Stat,
-	pub playtime: Stat,
-	pub completion_time: Stat,
-	pub forfeits: Stat,
-	pub completions: Stat,
-	pub wins: Stat,
+	pub best_time: RankedAndCasual<Option<u64>>,
+	pub highest_win_streak: RankedAndCasual,
+	pub current_win_streak: RankedAndCasual,
+	pub played_matches: RankedAndCasual,
+	pub playtime: RankedAndCasual,
+	pub completion_time: RankedAndCasual,
+	pub forfeits: RankedAndCasual,
+	pub completions: RankedAndCasual,
+	pub wins: RankedAndCasual,
 	#[serde(rename = "loses")]
-	pub losses: Stat,
+	pub losses: RankedAndCasual,
 }
 
 /// All statistics for season and total
