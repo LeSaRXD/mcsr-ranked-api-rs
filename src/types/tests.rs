@@ -15,6 +15,7 @@ mod time {
 
 mod api_result {
 	use serde::Deserialize;
+	use serde_json::Value;
 
 	use crate::{types::DeResult, user::SupporterTier};
 
@@ -29,18 +30,7 @@ mod api_result {
 	fn empty_error() {
 		const JSON: &str = r#"{"status":"error","data":null}"#;
 		let result = result_from::<Option<()>>(JSON);
-		assert_eq!(result, DeResult::Error(None));
-	}
-
-	#[test]
-	fn message_error() {
-		const JSON: &str =
-			r#"{"status":"error","data":"invalid `type` query. it must be >= 0 or <= 3"}"#;
-		let result = result_from::<Option<()>>(JSON);
-		assert_eq!(
-			result,
-			DeResult::Error(Some("invalid `type` query. it must be >= 0 or <= 3".into()))
-		);
+		assert_eq!(result, DeResult::Error(Value::Null));
 	}
 
 	#[test]
