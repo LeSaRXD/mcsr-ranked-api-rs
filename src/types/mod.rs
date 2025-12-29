@@ -3,9 +3,10 @@ use std::{
 	fmt::{self, Display},
 };
 
-use serde::{de, Deserialize, Deserializer};
+use serde::{Deserialize, Deserializer, de};
 #[cfg(feature = "serialize")]
-use serde::{ser::SerializeMap, Serialize};
+use serde::{Serialize, ser::SerializeMap};
+use serde_json::Value;
 use uuid::Uuid;
 
 #[cfg(test)]
@@ -55,7 +56,7 @@ pub type Result<T, E = Error> = std::result::Result<T, E>;
 #[derive(Debug)]
 pub enum Error {
 	/// Ranked API error
-	Api(Option<Box<str>>),
+	Api(Value),
 	/// Reqwest library error
 	Reqwest(reqwest::Error),
 }
@@ -80,8 +81,7 @@ impl From<reqwest::Error> for Error {
 impl Display for Error {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		match self {
-			Error::Api(Some(api_err)) => write!(f, "API Error: {api_err}"),
-			Error::Api(None) => f.write_str("API Error! (No message)"),
+			Error::Api(api_err) => write!(f, "API Error: {api_err}"),
 			Error::Reqwest(req_err) => write!(f, "Reqwest Error: {req_err}"),
 		}
 	}
@@ -92,14 +92,14 @@ impl std::error::Error for Error {}
 #[serde(tag = "status", content = "data", rename_all = "camelCase")]
 pub(crate) enum DeResult<T> {
 	Success(T),
-	Error(Option<Box<str>>),
+	Error(Value),
 }
 
 impl<T> From<DeResult<T>> for Result<T> {
 	fn from(value: DeResult<T>) -> Self {
 		match value {
 			DeResult::Success(t) => Ok(t),
-			DeResult::Error(e) => Err(Error::Api(e)),
+			DeResult::Error(error) => Err(Error::Api(error)),
 		}
 	}
 }
