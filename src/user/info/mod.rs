@@ -41,13 +41,13 @@ impl UserAchievements {
 #[serde(rename_all = "camelCase")]
 pub struct UserTimestamps {
 	#[serde(with = "ts_seconds")]
-	first_online: DateTime<Utc>,
+	pub first_online: DateTime<Utc>,
 	#[serde(with = "ts_seconds")]
-	last_online: DateTime<Utc>,
+	pub last_online: DateTime<Utc>,
 	#[serde(with = "ts_seconds")]
-	last_ranked: DateTime<Utc>,
+	pub last_ranked: DateTime<Utc>,
 	#[serde(with = "ts_seconds_option")]
-	next_decay: Option<DateTime<Utc>>,
+	pub next_decay: Option<DateTime<Utc>>,
 }
 
 /// All of the user's statistics
