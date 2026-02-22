@@ -1,5 +1,4 @@
-use chrono::DateTime;
-use chrono::{serde::ts_seconds, Utc};
+use chrono::{DateTime, Utc, serde::ts_seconds};
 use serde::Deserialize;
 #[cfg(feature = "serialize")]
 use serde::Serialize;
@@ -221,14 +220,14 @@ impl MatchInfo {
 pub struct AdvancedMatchInfo {
 	/// The base info about the match
 	#[serde(flatten)]
-	info: MatchInfo,
+	pub info: MatchInfo,
 	/// Which players completed the match
-	completions: Box<[MatchCompletion]>,
+	pub completions: Box<[MatchCompletion]>,
 	#[serde(rename = "timelines")]
 	/// Advancements and other events that happened during the match
-	timeline_events: Box<[MatchTimelineEvent]>,
+	pub timeline_events: Box<[MatchTimelineEvent]>,
 	#[serde(rename = "replayExist")]
-	replay_exists: bool,
+	pub replay_exists: bool,
 }
 impl AdvancedMatchInfo {
 	/// The completions info of the match
