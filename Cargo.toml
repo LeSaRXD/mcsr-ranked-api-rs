@@ -1,6 +1,6 @@
 [package]
 name = "mcsr-ranked-api"
-version = "0.6.3"
+version = "0.6.4"
 edition = "2024"
 description = "MCSR Ranked API wrapper in Rust"
 license-file = "LICENSE.txt"

@@ -364,8 +364,8 @@ fn match_category() {
 		MatchCategory::HowDidWeGetHere
 	);
 	assert_eq!(
-		serde_json::from_str::<MatchCategory>(r#""HERO_OF_THE_VILLAGE""#).unwrap(),
-		MatchCategory::HeroOfTheVillage
+		serde_json::from_str::<MatchCategory>(r#""HERO_OF_VILLAGE""#).unwrap(),
+		MatchCategory::HeroOfVillage
 	);
 	assert_eq!(
 		serde_json::from_str::<MatchCategory>(r#""ARBALISTIC""#).unwrap(),

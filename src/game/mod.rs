@@ -30,7 +30,7 @@ pub enum MatchCategory {
 	Half,
 	PoglootQuater,
 	HowDidWeGetHere,
-	HeroOfTheVillage,
+	HeroOfVillage,
 	Arbalistic,
 	CoverMeInDebris,
 	EnterNether,
