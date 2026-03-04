@@ -1,10 +1,10 @@
 use serde::Serialize;
 
 #[cfg(feature = "matches")]
-use crate::game::{requests::GetMatchesParams, MatchInfo};
+use crate::game::{MatchInfo, requests::GetMatchesParams};
 #[cfg(feature = "blocking")]
 use crate::helpers::make_request_blocking;
-use crate::{helpers::make_request, types::Season, user::identifier::UserIdentifier, Result};
+use crate::{Result, helpers::make_request, types::Season, user::identifier::UserIdentifier};
 
 use super::VersusInfo;
 
@@ -30,21 +30,26 @@ impl VersusInfo {
 	pub async fn get<'a>(
 		user_1: &UserIdentifier<'a>,
 		user_2: &UserIdentifier<'a>,
-		params: Option<&GetVersusInfoParams>,
+		params: impl Into<Option<&'a GetVersusInfoParams>>,
 	) -> Result<Self> {
-		make_request(BASE_URL, [&user_1.to_string(), &user_2.to_string()], params).await
+		make_request(
+			BASE_URL,
+			[&user_1.to_string(), &user_2.to_string()],
+			params.into(),
+		)
+		.await
 	}
 	#[cfg(feature = "matches")]
 	/// GET versus matches between two players using `params`
 	pub async fn get_matches<'a>(
 		user_1: &UserIdentifier<'a>,
 		user_2: &UserIdentifier<'a>,
-		params: Option<&GetMatchesParams>,
+		params: impl Into<Option<&'a GetMatchesParams>>,
 	) -> Result<Vec<MatchInfo>> {
 		make_request(
 			MATCHES_URL,
 			[&user_1.to_string(), &user_2.to_string()],
-			params,
+			params.into(),
 		)
 		.await
 	}
@@ -56,21 +61,25 @@ impl VersusInfo {
 	pub fn get_blocking<'a>(
 		user_1: &UserIdentifier<'a>,
 		user_2: &UserIdentifier<'a>,
-		params: Option<&GetVersusInfoParams>,
+		params: impl Into<Option<&'a GetVersusInfoParams>>,
 	) -> Result<Self> {
-		make_request_blocking(BASE_URL, [&user_1.to_string(), &user_2.to_string()], params)
+		make_request_blocking(
+			BASE_URL,
+			[&user_1.to_string(), &user_2.to_string()],
+			params.into(),
+		)
 	}
 	#[cfg(feature = "matches")]
 	/// Synchronounsly GET versus matches between two players using `params`
 	pub fn get_matches_blocking<'a>(
 		user_1: &UserIdentifier<'a>,
 		user_2: &UserIdentifier<'a>,
-		params: Option<&GetMatchesParams>,
+		params: impl Into<Option<&'a GetMatchesParams>>,
 	) -> Result<Vec<MatchInfo>> {
 		make_request_blocking(
 			MATCHES_URL,
 			[&user_1.to_string(), &user_2.to_string()],
-			params,
+			params.into(),
 		)
 	}
 }

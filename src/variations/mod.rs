@@ -1,11 +1,11 @@
 #[cfg(feature = "serialize")]
-use serde::{ser, Serialize};
+use serde::{Serialize, ser};
 #[cfg(test)]
 mod tests;
 
 use serde::{
-	de::{self, IntoDeserializer},
 	Deserialize,
+	de::{self, IntoDeserializer},
 };
 
 use crate::helpers::ser_str::StrSerializer;
@@ -204,6 +204,6 @@ impl Serialize for Variation {
 			Self::CagedEndTower(tower) => ser!("end_tower:caged:{}", tower),
 			Self::Other(parts) => parts.join(":"),
 		};
-		serializer.serialize_newtype_struct("Variation", &s)
+		serializer.serialize_newtype_struct(stringify!(Variation), &s)
 	}
 }

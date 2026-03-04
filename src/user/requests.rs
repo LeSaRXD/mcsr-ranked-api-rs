@@ -2,11 +2,11 @@ use serde::Serialize;
 
 #[cfg(feature = "blocking")]
 use crate::helpers::make_request_blocking;
-use crate::{helpers::make_request, types::Season, Result};
+use crate::{Result, helpers::make_request, types::Season};
 
 use super::{
 	identifier::UserIdentifier,
-	info::{all_seasons::AllSeasonUserInfo, UserInfo},
+	info::{UserInfo, all_seasons::AllSeasonUserInfo},
 };
 
 const BASE_URL: &str = "https://api.mcsrranked.com/users/{}";
@@ -29,10 +29,10 @@ impl GetUserParams {
 	}
 }
 
-impl UserIdentifier<'_> {
+impl<'a> UserIdentifier<'a> {
 	/// GET the user by identifier using given `params`
-	pub async fn get_user(&self, params: Option<&GetUserParams>) -> Result<UserInfo> {
-		make_request(BASE_URL, [&self.to_string()], Some(&params)).await
+	pub async fn get_user(&self, params: impl Into<Option<&'a GetUserParams>>) -> Result<UserInfo> {
+		make_request(BASE_URL, [&self.to_string()], params.into()).await
 	}
 	/// GET the user's info with data from all seasons
 	pub async fn get_user_all_seasons(&self) -> Result<AllSeasonUserInfo> {
@@ -41,10 +41,13 @@ impl UserIdentifier<'_> {
 }
 
 #[cfg(feature = "blocking")]
-impl UserIdentifier<'_> {
+impl<'a> UserIdentifier<'a> {
 	/// Synchronously GET the user by identifier using given `params`
-	pub fn get_user_blocking(&self, params: Option<&GetUserParams>) -> Result<UserInfo> {
-		make_request_blocking(BASE_URL, [&self.to_string()], Some(&params))
+	pub fn get_user_blocking(
+		&self,
+		params: impl Into<Option<&'a GetUserParams>>,
+	) -> Result<UserInfo> {
+		make_request_blocking(BASE_URL, [&self.to_string()], params.into())
 	}
 	/// Synchronously GET the user's info with data from all seasons
 	pub fn get_user_all_seasons_blocking(&self) -> Result<AllSeasonUserInfo> {

@@ -4,11 +4,11 @@ use std::ops::Not;
 #[cfg(feature = "blocking")]
 use crate::helpers::make_request_blocking;
 use crate::{
+	Result,
 	helpers::make_request,
 	pagination::Pagination,
 	types::{MatchId, Season},
 	user::identifier::UserIdentifier,
-	Result,
 };
 
 use super::{AdvancedMatchInfo, MatchInfo, MatchType};
@@ -50,21 +50,24 @@ impl From<Pagination> for GetMatchesParams {
 	}
 }
 
-impl UserIdentifier<'_> {
+impl<'a> UserIdentifier<'a> {
 	/// GET the user's matches by identifier using given `params`
-	pub async fn get_matches(&self, params: Option<&GetMatchesParams>) -> Result<Box<[MatchInfo]>> {
-		make_request(USER_URL, [&self.to_string()], params).await
+	pub async fn get_matches(
+		&self,
+		params: impl Into<Option<&'a GetMatchesParams>>,
+	) -> Result<Box<[MatchInfo]>> {
+		make_request(USER_URL, [&self.to_string()], params.into()).await
 	}
 }
 
 #[cfg(feature = "blocking")]
-impl UserIdentifier<'_> {
+impl<'a> UserIdentifier<'a> {
 	/// Synchronously GET the user's matches by identifier using given `params`
 	pub fn get_matches_blocking(
 		&self,
-		params: Option<&GetMatchesParams>,
+		params: impl Into<Option<&'a GetMatchesParams>>,
 	) -> Result<Box<[MatchInfo]>> {
-		make_request_blocking(USER_URL, [&self.to_string()], params)
+		make_request_blocking(USER_URL, [&self.to_string()], params.into())
 	}
 }
 
@@ -136,15 +139,19 @@ impl<'a> GetRecentMatchesParams<'a> {
 
 impl MatchInfo {
 	/// GET recent matches given `params`
-	pub async fn get_recent(params: Option<&GetRecentMatchesParams<'_>>) -> Result<Box<[Self]>> {
-		make_request(RECENT_URL, &[] as &[&str], params).await
+	pub async fn get_recent<'a>(
+		params: impl Into<Option<&'a GetRecentMatchesParams<'a>>>,
+	) -> Result<Box<[Self]>> {
+		make_request(RECENT_URL, &[] as &[&str], params.into()).await
 	}
 }
 
 #[cfg(feature = "blocking")]
 impl MatchInfo {
 	/// Synchronously GET recent matches given `params`
-	pub fn get_recent_blocking(params: Option<&GetRecentMatchesParams<'_>>) -> Result<Box<[Self]>> {
-		make_request_blocking(RECENT_URL, &[] as &[&str], params)
+	pub fn get_recent_blocking<'a>(
+		params: impl Into<Option<&'a GetRecentMatchesParams<'a>>>,
+	) -> Result<Box<[Self]>> {
+		make_request_blocking(RECENT_URL, &[] as &[&str], params.into())
 	}
 }

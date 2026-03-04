@@ -4,7 +4,7 @@ use serde::Serialize;
 
 #[cfg(feature = "blocking")]
 use crate::helpers::make_request_blocking;
-use crate::{helpers::make_request, types::Season, Result};
+use crate::{Result, helpers::make_request, types::Season};
 
 use super::BestTimeLeaderboard;
 
@@ -118,15 +118,19 @@ impl GetBestTimeLeaderboardParams {
 
 impl BestTimeLeaderboard {
 	/// GET the best time leaderboard using given `params`
-	pub async fn get(params: Option<&GetBestTimeLeaderboardParams>) -> Result<Self> {
-		make_request(BASE_URL, &[] as &[&str], params).await
+	pub async fn get<'a>(
+		params: impl Into<Option<&'a GetBestTimeLeaderboardParams>>,
+	) -> Result<Self> {
+		make_request(BASE_URL, &[] as &[&str], params.into()).await
 	}
 }
 
 #[cfg(feature = "blocking")]
 impl BestTimeLeaderboard {
 	/// Synchronously GET the best time leaderboard using given `params`
-	pub fn get_blocking(params: Option<&GetBestTimeLeaderboardParams>) -> Result<Self> {
-		make_request_blocking(BASE_URL, &[] as &[&str], params)
+	pub fn get_blocking<'a>(
+		params: impl Into<Option<&'a GetBestTimeLeaderboardParams>>,
+	) -> Result<Self> {
+		make_request_blocking(BASE_URL, &[] as &[&str], params.into())
 	}
 }

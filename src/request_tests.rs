@@ -1,4 +1,4 @@
-use crate::pagination::Pagination;
+use crate::{game::requests::GetMatchesParams, pagination::Pagination};
 
 #[test]
 #[ignore]
@@ -25,8 +25,8 @@ fn user_matches() {
 	use crate::user::identifier::UserIdentifier;
 
 	let doogile_id = UserIdentifier::Uuid(uuid!("3c8757790ab0400b8b9e3936e0dd535b"));
-	let params = Pagination::count(100).unwrap().into();
-	let request = doogile_id.get_matches_blocking(Some(&params));
+	let params = GetMatchesParams::from(Pagination::count(100).unwrap());
+	let request = doogile_id.get_matches_blocking(&params);
 	println!("{request:?}");
 	assert!(request.is_ok());
 }
